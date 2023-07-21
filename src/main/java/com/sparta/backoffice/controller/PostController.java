@@ -2,7 +2,6 @@ package com.sparta.backoffice.controller;
 
 import com.sparta.backoffice.dto.PostRequestDto;
 import com.sparta.backoffice.dto.PostResponseDto;
-import com.sparta.backoffice.dto.PostsResponseDto;
 import com.sparta.backoffice.entity.User;
 import com.sparta.backoffice.security.UserDetailsImpl;
 import com.sparta.backoffice.service.PostService;
@@ -11,14 +10,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @Slf4j
 @RestController
 @RequestMapping("/api")
 public class PostController {
 
     PostService postService;
+
     public PostController(PostService postService) {
         this.postService = postService;
     }
@@ -48,10 +46,12 @@ public class PostController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body("본인의 게시글만 삭제할 수 있습니다.");
         }
-
-    //게시글 검색
-    @GetMapping("/post")
-    public List<PostsResponseDto> searchPost(@RequestParam String text) {
-        return postService.searchPost(text);
     }
-}
+
+        //게시글 검색
+//        @GetMapping("/post")
+//        public List<PostsResponseDto> searchPost (@RequestParam String text){
+//            return postService.searchPost(text);
+//        }
+    }
+
