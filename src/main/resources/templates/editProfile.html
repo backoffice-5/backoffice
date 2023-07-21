@@ -30,12 +30,12 @@
 
 <div class="text-center container">
 
-    <form id="profileForm" name="infobox">
+    <div id="profileForm" name="infobox">
         <table>
             <tr>
                 <th class="p-3">username</th>
                 <td>
-                    <span id="username" th:text="${profile.username}"  class="input-box form-control text-center" ></span>
+                    <span id="username" th:text="${profile.username}" class="input-box form-control text-center"></span>
                 </td>
             </tr>
         </table>
@@ -55,7 +55,7 @@
             <tr>
                 <th class="p-3">password</th>
                 <td>
-                    <input type="text" id="password" class="inputbox form-control text-center"
+                    <input type="password" id="password" class="inputbox form-control text-center"
                            aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
                 </td>
             </tr>
@@ -63,55 +63,43 @@
 
 
         <div style="text-align: center;">
-            <button type="button" id="btn_modify" class="btn btn-primary btn m-2">SAVE</button>
-            <button type="button" id="btn_previous" class="btn btn-primary btn m-2" onclick="location.href='/'">CANCEL
+            <button type="button" onclick="save()" id="btn_modify" class="btn btn-primary btn m-2">SAVE</button>
+            <button type="button" id="btn_previous" class="btn btn-primary btn m-2"
+                    onclick="location.href='/api/profile'">CANCEL
             </button>
         </div>
-    </form>
+    </div>
 </div>
 </body>
 </html>
 
-<script type="text/javascript">
-
+<script>
     $('#btn_previous').click(function () {
-        window.location.href = "/api/profile";
+        window.location.href = "/api/profile"; //취소 버튼 누르면 profile페이지로 돌아가기
     });
 
-    $.ajax({
-        url: "/api/profile",
-        type: "GET",
-        contentType: "application/json",
-        success: function (response) {
-
-            let nickname = response['profileResponseDto']['nickname']
-            let password = response['profileResponseDto']['password']
+    function save() {
+        var nickname = $('#nickname').val();
+        var password = $('#password').val();
 
 
-            $('#btn_modify').click(function () {
-                if (confirm("정말 수정하시겠습니다?") == true) {
+        console.log(nickname, password);
 
+        $.ajax({
+            type : "PUT",
+            url: `/api/profile/update`,
+            contentType: "application/json",
+            data: JSON.stringify({nickname: nickname, password: password}),
+            success: function (response, status, xhr) {
+                alert("수정 완료");
+                window.location.href = `http://localhost:8080/api/profile`;
+            },
+            error: function (xhr, status, error) {
+                alert("수정 실패 !");
+                window.location.href = `http://localhost:8080/api/profile`;
+            }
+        });
+    }
 
-                    $.ajax({
-                        url: "/api/profile/update",
-                        type: "PUT",
-                        data: JSON.stringify({
-                            "nickname": nickname,
-                            "password":password,
-                        }),
-                        contentType: "application/json",
-                        success: function (json) {
-                            alert("닉네임이 변경되었습니다.")
-
-                        },
-                        error: function () {
-                            alert("수정에 실패하였습니다.")
-                        }
-                    });
-                }
-            });
-        }
-
-    });
 </script>
 

@@ -19,6 +19,7 @@ public class CommentResponseDto {
     private Integer commentlikeCount;  // 댓글 좋아요 수
     private Boolean liked;
     private String like;
+
     private String postTitle;
     private Long postId;
 

@@ -88,11 +88,12 @@ public class ProfileController {
     //프로필 수정
     @PutMapping("/profile/update")
     public ProfileResponseDto profileUpdate(@RequestBody ProfileRequestDto profileRequestDto,
-                                            @AuthenticationPrincipal UserDetailsImpl userDetails,
-                                            HttpServletResponse servletResponse) {
+                                            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+
 
         //회원 이름
-        String username = profileRequestDto.getUsername();
+        String username = userDetails.getUsername();
 
         //회원 비밀번호 받기
         String password = profileRequestDto.getPassword();
@@ -110,7 +111,7 @@ public class ProfileController {
     ) {
 
         //유저 받기
-        String username = profileRequestDto.getUsername();
+        String username = userDetails.getUsername();
 
         //현재 비밀번호 확인
         String password = profileRequestDto.getPassword();
@@ -121,10 +122,9 @@ public class ProfileController {
         // 새 비밀번호 확인
         String checkPassword = profileRequestDto.getCheckPassword();
 
-        if(newPassword.equals(checkPassword)) {
+        if (newPassword.equals(checkPassword)) {
             profileService.passwordUpdate(username, password, newPassword, userDetails.getUser());
-        }
-        else throw new IllegalArgumentException("새 비밀번호가 일치하지 않습니다.");
+        } else throw new IllegalArgumentException("새 비밀번호가 일치하지 않습니다.");
 
         return "비밀번호가 변경 되었습니다.";
     }

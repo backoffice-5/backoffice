@@ -38,7 +38,15 @@ public class ProfileViewController {
 
     //프로필 변경 페이지
     @GetMapping("/edit_profile")
-    public String getProfileEditPage() {
+    public String getProfileEditPage(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                     Model model) {
+
+        // 로그인한 회원 정보 profileResponseDto 담기
+        ProfileResponseDto profileResponseDto = profileService.getProfile(userDetails.getUser());
+
+        //정보 모델에 담기
+        model.addAttribute("profile", profileResponseDto);
+
 
         return "editProfile";
     }
