@@ -8,7 +8,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"
             integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.1.4/pagination.min.js"></script>
@@ -26,7 +25,6 @@
     <style>
         * {
             font-family: 'IBM Plex Sans KR', sans-serif;
-
         }
 
         html, body {
@@ -70,7 +68,6 @@
             margin: 0;
             padding: 0;
             width: 100%;
-
             height: 20%;
             display: flex;
             align-items: center;
@@ -130,7 +127,6 @@
             to {
                 transform: translate(0);
             }
-
         }
 
         .line {
@@ -313,14 +309,20 @@
             transform: translate(-50%, -50%);
             opacity: 0;
             transition: .25s 0s ease-in-out;
+            list-style:none;
+            padding-left:0px;
         }
 
         a{
+            font-size: 23px;
             margin-bottom: 1em;
             display: block;
             color: #000;
             text-decoration: none;
+            /* 글자들의 수직 간격 조정 */
+            line-height: 2.5;
         }
+
 
         /*---------------------------------------------------메뉴 css 끝*/
 
@@ -611,10 +613,10 @@
         }
 
         .profile {
-            margin: 0 50px 0 0;
+            margin: 0;
             padding: 0;
-            width: 100px;
-            height: 100px;
+            width: 15%;
+            height: 25%;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -626,7 +628,6 @@
             border-radius: 70%;
             overflow: hidden;
             float: left;
-            cursor: pointer;
         }
         .profile-image {
             width: 100%;
@@ -648,10 +649,15 @@
     <ul>
         <li>
             <a href="/api/auth/login-page" id="loginButton">로그인</a>
-            <a id="logoutButton" onclick="logout()">로그아웃</a><br>
-            <a href="/api/post" id="postButton">게시글 작성</a><br>
-            <a href="/api/graph" id="graphButton">게시글 현황</a>
-            <a href="/api/auth/backoffice" id="adminButton">관리자</a><br>
+        </li>
+        <li>
+            <a id="logoutButton" onclick="logout()">로그아웃</a>
+        </li>
+        <li>
+            <a href="/api/post" id="postButton">게시글 작성</a>
+        </li>
+        <li>
+            <a href="/api/admin" id="adminButton">관리자</a>
         </li>
     </ul>
 
@@ -659,7 +665,7 @@
 <!---------------------------------------------------------메뉴끝--->
 
 <div class="header">
-    <div class="profile" id="mypagebox">
+    <div class="profile">
         <div id="profile" class="box" onclick="my_page()">
             <img class="profile-image"
                  src="https://velog.velcdn.com/images/jee_ji/profile/399924c6-4e04-4ff6-9d95-4a76ffe2663b/image.png">
@@ -674,15 +680,6 @@
 <div class="line"></div>
 
 <div class ="bottom">
-
-    <!--th:onclick="|location.href='@{/api/post(text=${해당String값})}'|" 그냥 string 값을 주면 될듯?-->
-
-    <!--th:onclick="|location.href='@{(text=조회순 뭐 이런거 ..)}'|" 그냥 string 값을 주면 될듯?-->
-
-    <!--    <div class = "search">-->
-    <!--        <input id = "input" type="text" placeholder="검색어 입력">-->
-    <!--        <img id = "searching" src="https://cdn-icons-png.flaticon.com/128/2811/2811790.png">-->
-    <!--    </div>-->
 
     <div class="container">
         <div class="tabs">
@@ -764,7 +761,9 @@
             </div>
         `;
 
+
             cardsContainer.appendChild(card);
+
         }
     }
 
@@ -827,7 +826,7 @@
             mypagebox.style.display = 'inline';
         } else {
             loginButton.style.display = 'inline'; // JWT 토큰이 존재하지 않으면 로그인 버튼을 표시
-            loginButton.style.postButton = 'none'; // JWT 토큰이 존재하지 않으면 로그인 버튼을 표시
+            postButton.style.postButton = 'none'; // JWT 토큰이 존재하지 않으면 로그인 버튼을 표시
             logoutButton.style.display = 'none'; // JWT 토큰이 존재하지 않으면 로그아웃 버튼을 감춤
             adminButton.style.display = 'none';
             profile.style.display = 'none';

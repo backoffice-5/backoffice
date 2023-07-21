@@ -84,38 +84,38 @@ public class ProfileService {
 
     //관리자가 회원 권한 부여(관리자 모드)
     @Transactional
-    public String userToAdmin(String username, UserRoleEnum role, Boolean checkRole) {
+    public void userToAdmin(String username, UserRoleEnum role) {
 
         //회원 정보 찾기
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("회원 정보가 없습니다."));
 
         //권한 부여하기
-        if (role.equals(UserRoleEnum.ADMIN) && checkRole.equals(true)) {
+        if (role.equals(UserRoleEnum.ADMIN) && user.getRole().equals(UserRoleEnum.USER)) {
             user.setRole(UserRoleEnum.ADMIN);
-        }
-
-
-        return "수정이 완료되었습니다";
-
-    }
-
-    //관리자가 관리자 권한 회원으로 변경 (관리자 모드)
-    @Transactional
-    public String dropAdmin(String username, UserRoleEnum role, Boolean checkRole) {
-
-        //회원 정보 찾기
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new IllegalArgumentException("회원정보를 찾을 수 없습니다."));
-
-        //관리자이면서 받아온 값이 false이면 다른 관리자 회원으로 변경
-        if (role.equals(UserRoleEnum.ADMIN) && checkRole.equals(false)) {
+        } else if (role.equals(UserRoleEnum.ADMIN) && user.getRole().equals(UserRoleEnum.ADMIN)) {
             user.setRole(UserRoleEnum.USER);
-
+        } else {
+            throw new IllegalArgumentException("권한이 없습니다.");
         }
-
-        return "회원으로 전환되었습니다.";
     }
+
+//    //관리자가 관리자 권한 회원으로 변경 (관리자 모드)
+//    @Transactional
+//    public String dropAdmin(String username, UserRoleEnum role, Boolean checkRole) {
+//
+//        //회원 정보 찾기
+//        User user = userRepository.findByUsername(username)
+//                .orElseThrow(() -> new IllegalArgumentException("회원정보를 찾을 수 없습니다."));
+//
+//        //관리자이면서 받아온 값이 false이면 다른 관리자 회원으로 변경
+//        if (role.equals(UserRoleEnum.ADMIN) && checkRole.equals(false)) {
+//            user.setRole(UserRoleEnum.USER);
+//
+//        }
+//
+//        return "회원으로 전환되었습니다.";
+//    }
 
 
     // 프로필 업데이트
@@ -133,6 +133,14 @@ public class ProfileService {
         if (!(passwordEncoder.matches(password, author.getPassword()) || user.getRole().equals(UserRoleEnum.ADMIN))) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않거나 접근 권한이 없습니다.");
         }
+
+        //중복 닉네임 체크
+//        Optional<User> checkNickname = userRepository.findByNickname(profileRequestDto.getNickname());
+//
+//        if (checkNickname.isPresent()) {
+//            throw new IllegalArgumentException("이미 존재하는 nickname 입니다.");
+//        }
+
 
         //새 닉네임 값 넣기
         author.setNickname(profileRequestDto.getNickname());

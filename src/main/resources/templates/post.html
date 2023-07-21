@@ -97,13 +97,30 @@
             background-color: transparent;
         }
 
-        .image {
+        .profile {
+            margin: 0;
+            padding: 0;
+            width: 15%;
+            height: 25%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .box {
             height: 100%;
             min-height: 75px;
             min-width: 75px;
+            border-radius: 70%;
+            overflow: hidden;
             background-size: cover;
             background-color: transparent;
-            background-image: url("https://cdn-icons-png.flaticon.com/128/3024/3024605.png");
+        }
+
+        .profile-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .date {
@@ -211,25 +228,25 @@
 
         button:hover {
             cursor: pointer;
-            box-shadow:  4px 4px 4px 0 rgba(255,255,255,.5),
+            box-shadow: 4px 4px 4px 0 rgba(255, 255, 255, .5),
             -4px -4px 6px 0 rgba(116, 125, 136, .5),
-            inset -4px -4px 4px 0 rgba(255,255,255,.2),
+            inset -4px -4px 4px 0 rgba(255, 255, 255, .2),
             inset 4px 4px 4px 0 rgba(0, 0, 0, .4);
 
         }
 
-        .edit-form input{
+        .edit-form input {
             width: 90%;
-            color:#000;
-            display:block;
-            padding:10px 20px;
+            color: #000;
+            display: block;
+            padding: 10px 20px;
             margin: 15px;
-            border-radius:25px;
-            background:transparent;
+            border-radius: 25px;
+            background: transparent;
             border: #fff solid 2px;
         }
 
-        .edit-form div{
+        .edit-form div {
             width: 80%;
             margin-left: 15px;
         }
@@ -238,7 +255,7 @@
             margin-bottom: 15px;
         }
 
-        .mybutton{
+        .mybutton {
             margin: 10px auto;
             display: flex;
             justify-content: right;
@@ -250,12 +267,12 @@
 <body>
 <div class = "top">
     <div class="mybutton">
-        <button id ="loginButton">로그인</button>
+        <button id="loginButton">로그인</button>
         <button id="logoutButton" onclick="logout()">로그아웃</button> <!--onclick="location.href='/api/logout'"-->
     </div>
 
     <div class="header">
-        <div th:id="${post.id}" ></div>
+        <div th:id="${post.id}"></div>
         <div class="title1" style="flex:0.4;">
             <h2 th:text="${post.title}">Title</h2>
         </div>
@@ -263,38 +280,45 @@
             <h3 th:text="${post.nickname}">닉네임</h3>
         </div>
         <div class="title2" style="flex:0.2;">
-            <div class="image">
+            <!--            <div class="image">-->
+            <div class="profile">
+                <div id="profile" class="box" onclick="my_page()">
+                    <img class="profile-image"
+                         src="https://velog.velcdn.com/images/jee_ji/profile/399924c6-4e04-4ff6-9d95-4a76ffe2663b/image.png">
+                </div>
             </div>
         </div>
     </div>
+</div>
 
-    <div class = "date">
-        <h4 style="flex:1;" th:text="${#temporals.format(post.createAt, 'yyyy-MM-dd HH:mm')}">작성일</h4>
+<div class="date">
+    <h4 style="flex:1;" th:text="${#temporals.format(post.createAt, 'yyyy-MM-dd HH:mm')}">작성일</h4>
 
-        <div style="flex:1; display: flex; align-items:center; justify-content:end">
-            <h4 style="flex:0.5;" th:text="|조회수 ${post.views}|">조회수</h4>
-            <form onsubmit="return false;">
-                <label for="myCheckbox" class="checkbox-label">
-                    <input type="checkbox" id="myCheckbox" class="checkbox-input" onchange="handleCheckboxChange()"> <!--th:checked="${like == 'true'}"-->
-                    <span class="checkbox-image"></span>
-                    <span class="checkbox-text" th:text="${post.likeCount}"></span>  <!--th:text="${post.likeCount}"-->
-                </label>
-            </form>
-        </div>
-    </div>
-
-    <div class="content">
-        <p th:text="${post.content}">content</p>
-    </div>
-
-    <div class="mybuttons">
-        <button th:onclick="|location.href='@{/api/post(id=${post.id})}'|">글 수정</button>
-        <button onclick="location.href='/'">메인</button>
-        <button onclick="onDelete()">글 삭제</button>
+    <div style="flex:1; display: flex; align-items:center; justify-content:end">
+        <h4 style="flex:0.5;" th:text="|조회수 ${post.views}|">조회수</h4>
+        <form onsubmit="return false;">
+            <label for="myCheckbox" class="checkbox-label">
+                <input type="checkbox" id="myCheckbox" class="checkbox-input" onchange="handleCheckboxChange()">
+                <!--th:checked="${like == 'true'}"-->
+                <span class="checkbox-image"></span>
+                <span class="checkbox-text" th:text="${post.likeCount}"></span>  <!--th:text="${post.likeCount}"-->
+            </label>
+        </form>
     </div>
 </div>
 
-<div class = "line">
+<div class="content">
+    <p th:text="${post.content}">content</p>
+</div>
+
+<div class="mybuttons">
+    <button th:onclick="|location.href='@{/api/post(id=${post.id})}'|">글 수정</button>
+    <button onclick="location.href='/'">메인</button>
+    <button onclick="onDelete()">글 삭제</button>
+</div>
+</div>
+
+<div class="line">
 
 </div>
 
@@ -307,18 +331,21 @@
     </div>
 
     <div class="cardarea">
-        <div class="mycards" id="comment-list"  th:each="comment : ${comments}">
+        <div class="mycards" id="comment-list" th:each="comment : ${comments}">
             <div class="card" id="card">
                 <div class="card-body" style="display: flex;">
                     <div card style="width: 90%">
                         <p id="commentName_" th:text="${comment.nickname}">유저이름</p>
                         <p id="commentContent_" th:text="${comment.commentcontents}">댓글내용</p>
-                        <p id="commentDate_" th:text="|댓글 작성일: ${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}|" class="blockquote-footer">date</p>
+                        <p id="commentDate_"
+                           th:text="|댓글 작성일: ${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}|"
+                           class="blockquote-footer">date</p>
                     </div>
                     <div style="width: 10%; display: flex; justify-content: center; align-items: center; float:right;">
                         <form onsubmit="return false;">
                             <label class="comment-checkbox-label">
-                                <input type="checkbox" class="comment-checkbox-input" th:id="${comment.id}" th:checked="${comment.like == 'true'}" > <!-- "${comment.liked}"-->
+                                <input type="checkbox" class="comment-checkbox-input" th:id="${comment.id}"
+                                       th:checked="${comment.like == 'true'}"> <!-- "${comment.liked}"-->
                                 <span class="comment-checkbox-image"></span>
                                 <span class="comment-checkbox-text" th:text="${comment.commentlikeCount}">00</span>
                             </label>
@@ -326,9 +353,9 @@
                     </div>
                 </div>
 
-                <div class="card-button" id = "card-button">
-                    <button class = "button_ud" id="button_ud">수정</button>
-                    <button class = "button_del" th:id="${comment.id}">삭제</button>
+                <div class="card-button" id="card-button">
+                    <button class="button_ud" id="button_ud">수정</button>
+                    <button class="button_del" th:id="${comment.id}">삭제</button>
                 </div>
 
                 <div class="edit-form" style="display: none">
@@ -361,7 +388,7 @@
     var like = [[${like}]]; // 서버에서 전달된 like 값을 가져옵니다.
 
     // 페이지 로딩 후 실행되는 함수
-    window.onload = function() {
+    window.onload = function () {
         var checkbox = document.getElementById('myCheckbox');
         if (like) {
             checkbox.checked = true; // like 값이 true인 경우 체크박스 선택
@@ -400,6 +427,10 @@
         }
 
         return null; // JWT가 존재하지 않는 경우 null 반환
+    }
+
+    function my_page() {
+        window.location.href = "/api/profile"; // mypage
     }
 
     // 게시글 삭제
@@ -629,6 +660,7 @@
             onHeartDelete();
         }
     }
+
     function onHeartAdd() {
         let url = window.location.href;
         let id = url.replace("http://localhost:8080/api/post/", "");

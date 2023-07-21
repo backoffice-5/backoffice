@@ -30,6 +30,11 @@ public class PostController {
         return postService.createPost(requestDto, user);
     }
 
+    @GetMapping("/posts/{method}")
+    public List<PostResponseDto> getAllPost(@PathVariable String method) {
+        return postService.getAllPost(method);
+    }
+
     // 게시글 업데이트
     @PutMapping("/post/{id}")
     public PostResponseDto updatePost(@PathVariable Long id, @RequestBody PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -50,14 +55,10 @@ public class PostController {
         }
     }
 
-    @GetMapping("/posts/{method}")
-    public List<PostResponseDto> getAllPost(@PathVariable String method) {
-        return postService.getAllPost(method);
-    }
+        //게시글 검색
+//        @GetMapping("/post")
+//        public List<PostsResponseDto> searchPost (@RequestParam String text){
+//            return postService.searchPost(text);
+//        }
 
-    //게시글 검색
-//    @GetMapping("/post")
-//    public List<PostsResponseDto> searchPost(@RequestParam String text) {
-//        return postService.searchPost(text);
-//    }
 }

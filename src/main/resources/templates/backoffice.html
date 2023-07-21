@@ -71,14 +71,15 @@
               });
     }
 
+    // 게시글 수정
     function updatePost(id) {
-      console.log(id);
       // id를 쿼리 스트링으로 추가하여 URL을 생성
       const url = '/api/post?id=' + id;
       // URL을 이동
       window.location.href = url;
     }
 
+    // 게시글 삭제
     function deletePost(id) {
       let url = '/api/post/' + id
       console.log(url)
@@ -88,10 +89,14 @@
           'Content-Type': 'application/json',
         }
       })
-              .catch(error => {
-                // 에러 처리
-                console.error('댓글 삭제 중 오류가 발생했습니다.', error);
-              });
+      .then(function (data) {
+        alert("삭제 완료");
+        window.location.reload();
+      })
+      .catch(error => {
+        // 에러 처리
+        console.error('댓글 삭제 중 오류가 발생했습니다.', error);
+      });
     }
 
     //댓글 목록 가져오기
@@ -105,8 +110,10 @@
               .then(response => response.json())
               .then(data => {
                 for (let i = 0; i < data.length; i++) {
-                  console.log(data[i]);
+                  // console.log(data[i]);
 
+                  let id = data[i].id;
+                  let postId = data[i].postId;
                   let postTitle = data[i].postTitle;
                   let username = data[i].username;
                   let nickname = data[i].nickname;
@@ -118,7 +125,7 @@
                                         <span>유저별명: ${nickname}</span>
                                         <span>댓글 내용: ${commentContent}</span>
                                         <button>수정</button>
-                                        <button>삭제</button>
+                                        <button onclick="deleteComment(${id},${postId})">삭제</button>
                                     </div>`;
 
                   $('#content2').append(temp_html);
@@ -127,6 +134,25 @@
               .catch(error => {
                 // 오류 처리 로직을 작성합니다.
                 console.error(error);
+              });
+    }
+
+    // 게시글 삭제
+    function deleteComment(commentId, postId) {
+      let url = '/api/post/' + postId + '/comment/' + commentId;
+      fetch(url, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
+              .then(function (data) {
+                alert("삭제 완료");
+                window.location.reload();
+              })
+              .catch(error => {
+                // 에러 처리
+                console.error('댓글 삭제 중 오류가 발생했습니다.', error);
               });
     }
 
@@ -168,7 +194,7 @@
 
     //관리자가 일반 회원에게 관리자 권한 부여
     function userToAdmin(username) {
-      let url = `/api/profile/role/` + username;
+      let url = '/api/profile/role/' + username;
       console.log(url);
       fetch(url, {
         method: 'PUT',
@@ -182,6 +208,7 @@
               });
     }
 
+
   </script>
 </head>
 <body>
@@ -190,16 +217,16 @@
 <button id="toggle-button3">회원정보 수정,삭제</button>
 
 <div id="content1" class="toggle-content">
-  <!--  게시글 수정,삭제를 위한 토글-->
+<!--  게시글 수정,삭제를 위한 토글-->
 
 </div>
 
 <div id="content2" class="toggle-content">
-  댓글 수정,삭제를 위한 토글
+<!--  댓글 수정,삭제를 위한 토글-->
 </div>
 
 <div id="content3" class="toggle-content">
-  회원정보 수정,삭제를 위한 토글
+<!--  회원정보 수정,삭제를 위한 토글-->
 </div>
 
 <script>

@@ -14,13 +14,12 @@ public class ProfileResponseDto {
     private String nickname;
     private String role;
 
-
     //회원 정보
     public ProfileResponseDto(User user) {
+        this.id = user.getId();
         this.username = user.getUsername();
         this.nickname = user.getNickname();
-        this.id = user.getId();
-        this.role = user.getRole().getAuthority();
+        this.role = user.getRole() + "";
     }
 
 

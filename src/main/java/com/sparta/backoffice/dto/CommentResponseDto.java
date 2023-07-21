@@ -20,16 +20,18 @@ public class CommentResponseDto {
     private Boolean liked;
     private String like;
     private String postTitle;
+    private Long postId;
 
     public CommentResponseDto(Comment comment) {
         this.id = comment.getId();
-        this.nickname = comment.getUser().getNickname();
         this.username = comment.getUser().getUsername();
         this.commentcontents = comment.getCommentcontents();
         this.createdAt = comment.getCreatedAt();
         this.modifiedAt = comment.getModifiedAt();
         this.commentlikeCount = comment.getCommentlikeCount();
+        this.nickname = comment.getUser().getNickname();
         this.postTitle = comment.getPost().getTitle();
+        this.postId = comment.getPost().getId();
     }
 
     public void setLike(Boolean b) {
