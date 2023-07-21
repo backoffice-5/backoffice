@@ -19,12 +19,11 @@ public class CommentResponseDto {
     private Integer commentlikeCount;  // 댓글 좋아요 수
     private Boolean liked;
     private String like;
-    private String nickname;
     private String postTitle;
+    private Long postId;
 
     public CommentResponseDto(Comment comment) {
         this.id = comment.getId();
-        this.nickname = comment.getUser().getNickname();
         this.username = comment.getUser().getUsername();
         this.commentcontents = comment.getCommentcontents();
         this.createdAt = comment.getCreatedAt();
@@ -32,6 +31,7 @@ public class CommentResponseDto {
         this.commentlikeCount = comment.getCommentlikeCount();
         this.nickname = comment.getUser().getNickname();
         this.postTitle = comment.getPost().getTitle();
+        this.postId = comment.getPost().getId();
     }
 
     public void setLike(Boolean b) {
