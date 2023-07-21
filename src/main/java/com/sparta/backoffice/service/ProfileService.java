@@ -124,11 +124,11 @@ public class ProfileService {
         }
 
         //중복 닉네임 체크
-        Optional<User> checkNickname = userRepository.findByNickname(profileRequestDto.getNickname());
-
-        if (checkNickname.isPresent()) {
-            throw new IllegalArgumentException("이미 존재하는 nickname 입니다.");
-        }
+//        Optional<User> checkNickname = userRepository.findByNickname(profileRequestDto.getNickname());
+//
+//        if (checkNickname.isPresent()) {
+//            throw new IllegalArgumentException("이미 존재하는 nickname 입니다.");
+//        }
 
 
         //새 닉네임 값 넣기
