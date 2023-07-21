@@ -22,10 +22,15 @@ public class CommentLike {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
+    @JoinColumn(name = "post_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Post post;
+
     @Column(name = "commentlike")
     private Boolean like;
 
-    public CommentLike(User user, Comment comment) {
+    public CommentLike(Post post, User user, Comment comment) {
+        this.post = post;
         this.user = user;
         this.comment = comment;
     }

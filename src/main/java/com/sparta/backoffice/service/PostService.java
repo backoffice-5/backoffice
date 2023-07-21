@@ -6,6 +6,8 @@ import com.sparta.backoffice.dto.PostsResponseDto;
 import com.sparta.backoffice.entity.Post;
 import com.sparta.backoffice.entity.User;
 import com.sparta.backoffice.entity.UserRoleEnum;
+import com.sparta.backoffice.repository.CommentLikeRepository;
+import com.sparta.backoffice.repository.PostLikeRepository;
 import com.sparta.backoffice.repository.PostRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,9 +19,13 @@ import java.util.List;
 public class PostService {
 
     // repository 주입받음
-    PostRepository postRepository;
-    public PostService(PostRepository postRepository) {
+    private final PostRepository postRepository;
+    private final PostLikeRepository postLikeRepository;
+    private final CommentLikeRepository commentLikeRepository;
+    public PostService(PostRepository postRepository, PostLikeRepository postLikeRepository, CommentLikeRepository commentLikeRepository) {
+        this.postLikeRepository = postLikeRepository;
         this.postRepository = postRepository;
+        this.commentLikeRepository = commentLikeRepository;
     }
 
     // 게시글 생성
@@ -31,28 +37,32 @@ public class PostService {
     }
 
     //게시글 전체조회: 제목, 닉네임, 댓글수, 좋아요수, 조회수만 List형태로 만들어 return 한다.
-    public List<PostsResponseDto> getAllPost(String method) {
-        List<PostsResponseDto> postsResponseDtoList = new ArrayList<>();
+    public List<PostResponseDto> getAllPost(String method) {
+        List<PostResponseDto> postResponseDtoList = new ArrayList<>();
         List<Post> postList;
 
         // PathVariable로 기준을 정해서 그 기준으로 가져오게끔 했음
         if (method.equals("createAt")) {
-            postList = postRepository.findAllByOrderByCreatedAtDesc();
+            postResponseDtoList = postRepository.findAllByOrderByCreatedAtDesc().stream().map(PostResponseDto::new).toList();
+//            postList = postRepository.findAllByOrderByCreatedAtDesc();
         } else if (method.equals("views")) {
-            postList = postRepository.findAllByOrderByViewsDesc();
+            postResponseDtoList = postRepository.findAllByOrderByViewsDesc().stream().map(PostResponseDto::new).toList();
+//            postList = postRepository.findAllByOrderByViewsDesc();
         } else if (method.equals("likes")) {
-            postList = postRepository.findAllByOrderByLikeCountDesc();
+            postResponseDtoList = postRepository.findAllByOrderByLikeCountDesc().stream().map(PostResponseDto::new).toList();
+//            postList = postRepository.findAllByOrderByLikeCountDesc();
         } else if (method.equals("comment")) {
-            postList = postRepository.findAllByOrderByCommentCountDesc();
+            postResponseDtoList = postRepository.findAllByOrderByCommentCountDesc().stream().map(PostResponseDto::new).toList();
+//            postList = postRepository.findAllByOrderByCommentCountDesc();
         } else {
             throw new IllegalArgumentException("올바른 url이 아닙니다.");
         }
 
-        for (Post post: postList) {
-            postsResponseDtoList.add(new PostsResponseDto(post));
-        }
+//        for (Post post: postList) {
+//            postResponseDtoList.add(new PostsResponseDto(post));
+//        }
 
-        return postsResponseDtoList;
+        return postResponseDtoList;
     }
 
 
@@ -90,10 +100,26 @@ public class PostService {
     public void deletePost(Long id, User user) {
         Post post = findById(id);
         if (post.getUsername().equals(user.getUsername()) || user.getRole().equals(UserRoleEnum.ADMIN)) {
+            // 해당 게시글과 연동된 댓글들의 좋아요 기록 전부 삭제하기
+            commentLikeRepository.deleteAll(commentLikeRepository.findAllByPost(post));
+            // 해당 게시글과 연관된 게시글 좋아요 기록 전부 삭제하기
+            postLikeRepository.deleteAll(postLikeRepository.findAllByPost(post));
             postRepository.delete(post);
         } else {
             throw new IllegalArgumentException("본인이 아니거나 관리자가 아니면 삭제할수 없습니다.");
         }
+    }
+
+    // 검색 기능
+    public List<PostsResponseDto> searchPost(String text) {
+        List<Post> postList = postRepository.findAll();
+        List<PostsResponseDto> postsResponseDtoList = new ArrayList<>();
+        for (int i = 0; i < postList.size(); i++) {
+            if (postList.get(i).getTitle().contains(text) || postList.get(i).getContent().contains(text)) {
+                postsResponseDtoList.add(new PostsResponseDto(postList.get(i)));
+            }
+        }
+        return postsResponseDtoList;
     }
 
 

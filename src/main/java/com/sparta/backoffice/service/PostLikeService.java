@@ -60,6 +60,20 @@ public class PostLikeService {
         }
     }
 
+    public Boolean likefind(Long id, User user) {
+        Post post = findPostById(id);
+        Optional<PostLike> postLike = findPostLikeByPostAndUser(post, user);
+        if (postLike.isPresent()) {
+            if (postLike.get().getLike()) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
     private Post findPostById(Long id) {
         return postRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("글을 찾을수 없습니다.(PostLikeService)")

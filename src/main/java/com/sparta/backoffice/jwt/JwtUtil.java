@@ -120,6 +120,7 @@ public class JwtUtil {
             }
         }
         return null;
+
     }
 
     //로그아웃 쿠키 날짜를 0으로 만들어 만료시킴
@@ -137,5 +138,4 @@ public class JwtUtil {
             }
         }
     }
-
 }

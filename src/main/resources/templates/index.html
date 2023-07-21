@@ -13,10 +13,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.1.4/pagination.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.1.4/pagination.css"/>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/128/1534/1534072.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR&display=swap" rel="stylesheet">
+
+
     <title>메인 페이지</title>
     <style>
         * {
             font-family: 'IBM Plex Sans KR', sans-serif;
+
         }
 
         html, body {
@@ -26,14 +35,11 @@
             padding: 0;
             overflow: hidden;
             color: #000000;
-            /*cursor: url("https://cdn-icons-png.flaticon.com/128/4713/4713405.png") 16 16,auto;*/
         }
 
         h1 {
             margin: 0;
         }
-
-
 
         a {
             position: relative;
@@ -63,6 +69,7 @@
             margin: 0;
             padding: 0;
             width: 100%;
+
             height: 20%;
             display: flex;
             align-items: center;
@@ -70,6 +77,15 @@
             text-align: center;
             background-color: transparent;
             /*flex-direction: column;*/
+        }
+
+        .glitch {
+            position: relative;
+            font-size: 60px;
+            font-weight: bold;
+            color: #FFB7C2;
+            letter-spacing: 3px;
+            z-index: 1;
         }
 
         .glitch:before,
@@ -113,36 +129,14 @@
             to {
                 transform: translate(0);
             }
-        }
-/*------------------------------------------------------------------------헤더&프로필*/
-        .profile {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 25%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
 
-        .box {
-            width: 100px;
-            height: 100px;
-            border-radius: 70%;
-            overflow: hidden;
-            float: left;
-        }
-        .profile-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
         }
 
         .line {
             margin: 0;
             width: 100%;
             height: 0.5%;
-            background: linear-gradient(-45deg, #ff855e, #e73c7e, #ffd600, #2332d5);
+            background: linear-gradient(-45deg, #D21312, #e73c7e, #ED2B2A, #F15A59);
             background-size: 400% 400%;
             opacity: 0.2;
             animation: gradient 15s ease infinite;
@@ -160,45 +154,55 @@
             }
         }
 
-        @keyframes floatClouds {
-            0%, 100% {
-                transform: translateX(-50px);
-            }
-
-            50% {
-                transform: translateX(50px);
-            }
-        }
-
         .title1 {
+            position: relative;
             font-size: 50px;
             color: #D85858;
-            text-shadow: 0px 0px 20px #C3F8FF;
-            position: relative;
-            float: left;
-            animation: ani 1s infinite alternate;
+            letter-spacing: 3px;
+            z-index: 1;
         }
 
-        .title2 {
-            position: relative;
-            font-size: 20px;
+        .title1:before,
+        .title1:after {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0.8;
         }
 
-        .title2 > span {
-            position: relative;
-            color: #ABD9FF;
-            animation: ani 1s infinite alternate;
+        .title1:before {
+            animation: glitch-it 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+            color: #00FFFF;
+            z-index: -1;
         }
 
-        @keyframes ani {
+        .title1:after {
+            animation: glitch-it 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) reverse both infinite;
+            color: #FF00FF;
+            z-index: -2;
+        }
+
+        @keyframes glitch-it {
             0% {
-                transform: translate(0, 0);
+                transform: translate(0);
             }
-            100% {
-                transform: translate(0, 5px);
+            20% {
+                transform: translate(-2px, 2px);
+            }
+            40% {
+                transform: translate(-2px, -2px);
+            }
+            60% {
+                transform: translate(2px, 2px);
+            }
+            80% {
+                transform: translate(2px, -2px);
+            }
+            to {
+                transform: translate(0);
             }
         }
-
 
         .header > div:nth-child(6),
         .header > div:nth-child(7) {
@@ -223,9 +227,9 @@
             font-family: "Cutive Mono", serif;
             font-size: 1.2em;
             line-height: 1.6;
-            background: rgb(255,236,244);
-            background: radial-gradient(circle, rgba(255,236,244,1) 0%, rgba(236,251,255,1) 100%);
             overflow-x: hidden;
+            background: rgb(255, 236, 244);
+            background: radial-gradient(circle, rgba(255, 236, 244, 1) 0%, rgba(236, 251, 255, 1) 100%);
         }
 
         label .menu {
@@ -319,32 +323,198 @@
 
         /*---------------------------------------------------메뉴 css 끝*/
 
+        .row {
+            display: flex;
+            align-items: center;
+            width: 98%;
+            height: 23%;
+            margin-bottom: 15px;
+        }
 
-        /*---------------------------------------------------탭 css 끝*/
-        @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
+        .bottom{
+            margin-top: 0px;
+            width: 100%;
+            background-color: transparent;
+            align-items: center;
+            justify-self: center;
+            height: 79.5%;
+            color: #000000;
+            display: flex;
+            flex-direction: column;
+        }
 
+        .cards{
+            margin-top: 15px;
+            background-color: transparent;
+            width: 70%;
+            overflow: scroll;
+            overflow-x: hidden;
+            margin-bottom: 10px;
+        }
+
+        .card-body {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .card{
+            width: 100%;
+            min-height: 10px;
+            height: 90%;
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+            color: #000
+        }
+
+        .cards::-webkit-scrollbar {
+            margin-left: 5px;
+            width: 6px;
+        }
+
+        .cards::-webkit-scrollbar-track {
+            background-color: transparent;
+        }
+
+        .cards::-webkit-scrollbar-thumb {
+            border-radius: 3px;
+            background-color: #FFCACA;
+        }
+
+        .cards::-webkit-scrollbar-button {
+            width: 0;
+            height: 0;
+        }
+
+        .left-content > h4 {
+            margin: 0 auto;
+            font-size: 20px;
+        }
+        .left-content > p {
+            margin: 0 auto;
+            font-size: 16px;
+        }
+
+        .left-content {
+            flex-grow: 1;
+        }
+
+        .right-content {
+            display: flex;
+            float: right;
+            align-items: center;
+            justify-content: center;
+            margin-left: 10px;
+        }
+
+        .right-content > button {
+            height: 50%;
+        }
+
+        .btn-5 {
+            width: 130px;
+            height: 40px;
+            color: #fff;
+            border-radius: 5px;
+            padding: 10px 25px;
+            font-family: 'Lato', sans-serif;
+            font-weight: 500;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: inline-block;
+            box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+            7px 7px 20px 0px rgba(0,0,0,.1),
+            4px 4px 5px 0px rgba(0,0,0,.1);
+            outline: none;
+            line-height: 42px;
+            padding: 0;
+            border: none;
+            background: #FFCACA;
+            background: linear-gradient(0deg, #FFCACA 0%, #FFB1B1 100%);
+        }
+
+        .btn-5:hover {
+            color: #FFCACA;
+            background: transparent;
+            box-shadow:none;
+        }
+
+        .btn-5:before,
+        .btn-5:after{
+            content:'';
+            position:absolute;
+            top:0;
+            right:0;
+            height:2px;
+            width:0;
+            background: #FFCACA;
+            box-shadow:
+                    -1px -1px 5px 0px #fff,
+                    7px 7px 20px 0px #0003,
+                    4px 4px 5px 0px #0002;
+            transition:400ms ease all;
+        }
+
+        .btn-5:after{
+            right:inherit;
+            top:inherit;
+            left:0;
+            bottom:0;
+        }
+
+        .btn-5:hover:before,
+        .btn-5:hover:after{
+            width:100%;
+            transition:800ms ease all;
+        }
+
+        /* 검색어 */
+
+        .search{
+            margin-top: 20px;
+            height: 10%;
+            width: 70%;
+            display: flex;
+            justify-content: center;
+            position: relative;
+        }
+
+        .search #input {
+            display: block;
+            height: 100%;
+            width: 100%;
+            background: white;
+            border: 1px solid #bbb;
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 14px;
+        }
+
+        .search img {
+            position : absolute;
+            width: 20px;
+            top: 29%;
+            right: 12px;
+            margin: 0;
+            cursor: pointer;
+        }
+
+        /* 네비게이션 탭 메뉴 */
         :root {
             --primary-color: #185ee0;
             --secondary-color: #e6eef9;
         }
 
-        *,
-        *:after,
-        *:before {
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: "Inter", sans-serif;
-            background-color: rgba(230, 238, 249, 0.5);
-        }
-
         .container {
-            position: absolute;
-            left: 0;
-            top: 0;
-            right: 0;
-            bottom: 0;
+            margin-top: 10px;
+            width: 80%;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -352,6 +522,7 @@
 
         .tabs {
             display: flex;
+            width: 85%;
             position: relative;
             background-color: #fff;
             box-shadow: 0 0 1px 0 rgba(24, 94, 224, 0.15), 0 6px 12px 0 rgba(24, 94, 224, 0.15);
@@ -371,7 +542,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 54px;
+            height: 40px;
             width: 200px;
             font-size: 1.25rem;
             font-weight: 500;
@@ -384,8 +555,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 2rem;
-            height: 2rem;
+            width: 70px;
+            height: 30px;
             margin-left: 0.75rem;
             border-radius: 50%;
             background-color: var(--secondary-color);
@@ -424,7 +595,7 @@
         .glider {
             position: absolute;
             display: flex;
-            height: 54px;
+            height: 45px;
             width: 200px;
             background-color: var(--secondary-color);
             z-index: 1;
@@ -438,8 +609,28 @@
             }
         }
 
-        /*---------------------------------------------------탭 css 시작*/
+        .profile {
+            margin: 0;
+            padding: 0;
+            width: 15%;
+            height: 25%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
+        .box {
+            width: 100px;
+            height: 100px;
+            border-radius: 70%;
+            overflow: hidden;
+            float: left;
+        }
+        .profile-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
     </style>
 </head>
 
@@ -451,91 +642,106 @@
     <span class="menu">
     <span class="hamburger"></span>
   </span>
-        <ul>
-            <li>
-                <a href="/api/auth/login-page" id="loginButton" >로그인</a>
-                <a id="logoutButton" onclick=logout()>로그아웃</a><br>
-                <a href="/api/admin" id="adminButton">관리자</a><br>
-            </li>
-        </ul>
+
+    <ul>
+        <li>
+            <a href="/api/auth/login-page" id="loginButton">로그인</a>
+            <a id="logoutButton" onclick="logout()">로그아웃</a><br>
+            <a href="/api/admin" id="adminButton">관리자</a><br>
+        </li>
+    </ul>
+
 </label>
 <!---------------------------------------------------------메뉴끝--->
 
 <div class="header">
-    <div class="glitch" data-text="Back Office">Back Office</div>
-</div>
-
-<div class="profile">
-    <div id = "profile" class="box" onclick=my_page() style="background: #BDBDBD;">
-        <img class="profile-image" src="https://velog.velcdn.com/images/jee_ji/profile/399924c6-4e04-4ff6-9d95-4a76ffe2663b/image.png">
+    <div class="profile">
+        <div id="profile" class="box" onclick="my_page()">
+            <img class="profile-image"
+                 src="https://velog.velcdn.com/images/jee_ji/profile/399924c6-4e04-4ff6-9d95-4a76ffe2663b/image.png">
+        </div>
     </div>
+
+
+    <div class="glitch" data-text="Back Office">Back Office</div>
+
 </div>
 
 <div class="line"></div>
+
 <div class ="bottom">
 
+<!--th:onclick="|location.href='@{/api/post(text=${해당String값})}'|" 그냥 string 값을 주면 될듯?-->
 
-<!---------------------------------------------------------탭 html 시작--->
+    <!--th:onclick="|location.href='@{(text=조회순 뭐 이런거 ..)}'|" 그냥 string 값을 주면 될듯?-->
 
-<div class="container">
-    <div class="tabs">
-        <input type="radio" id="radio-1" name="tabs" checked />
-        <label class="tab" for="radio-1">전체</label>
-        <input type="radio" id="radio-2" name="tabs" />
-        <label class="tab" for="radio-2">조회수</label>
-        <input type="radio" id="radio-3" name="tabs" />
-        <label class="tab" for="radio-3">댓글수</label>
-        <input type="radio" id="radio-4" name="tabs" />
-        <label class="tab" for="radio-4">좋아요수</label>
-        <input type="radio" id="radio-5" name="tabs" />
-        <label class="tab" for="radio-5">최신</label>
-        <span class="glider"></span>
-    </div>
-</div>
-<!---------------------------------------------------------탭 html 끝--->
+<!--    <div class = "search">-->
+<!--        <input id = "input" type="text" placeholder="검색어 입력">-->
+<!--        <img id = "searching" src="https://cdn-icons-png.flaticon.com/128/2811/2811790.png">-->
+<!--    </div>-->
 
-<div class = "cards">
-    <div class="row" th:each="post : ${posts}">
-        <div class="card">
-            <div class="card-header" > <!--th:text="${post.id}"-->
-            </div>
-            <div class="card-body">
-                <div class="left-content">
-                    <h4 class="card-title" th:text="${post.title}">title</h4>
-                    <p class="card-text" th:text="${post.nickname}">username</p>
-                    <!--"'Value 1: ' + ${value1} + ' - Value 2: ' + ${value2}"-->
-                    <p class="card-text" th:text="${#temporals.format(post.createAt, 'yyyy-MM-dd HH:mm')} + ' | 조회수: ' + ${post.views} + '회 | 좋아요 수: ' + ${post.likeCount} + '개'">시간</p>
-                </div>
-                <div class="right-content">
-                    <button th:onclick="|location.href='/api/post/' + ${post.id}|" class="btn-5">보러가기</button>
-                </div>
-            </div>
+    <div class="container">
+        <div class="tabs">
+            <input type="radio" id="radio-1" name="tabs" checked/>
+            <label class="tab" for="radio-1">전체</label>
+            <input type="radio" id="radio-2" name="tabs"/>
+            <label class="tab" for="radio-2">조회수</label>
+            <input type="radio" id="radio-3" name="tabs"/>
+            <label class="tab" for="radio-3">댓글수</label>
+            <input type="radio" id="radio-4" name="tabs"/>
+            <label class="tab" for="radio-4">좋아요수</label>
+            <input type="radio" id="radio-5" name="tabs"/>
+            <label class="tab" for="radio-5">최신</label>
+            <span class="glider"></span>
         </div>
-        <br>
-
     </div>
-</div>
-</div>
-</body>
-<script>
-    const host = 'http://' + window.location.host;
 
-    function logout() {
-        window.location.href = "/";
-        deleteJwtCookie();
-    }
+    <div class = "cards">
+        <div class="row" th:each="post : ${posts}">
+            <div class="card">
+                <div class="card-header" > <!--th:text="${post.id}"-->
+                </div>
+                <div class="card-body">
+                    <div class="left-content">
+                        <h4 class="card-title" th:text="${post.title}">title</h4>
+                        <p class="card-text" th:text="${post.nickname}">username</p>
+                        <!--"'Value 1: ' + ${value1} + ' - Value 2: ' + ${value2}"-->
+                        <p class="card-text" th:text="${#temporals.format(post.createAt, 'yyyy-MM-dd HH:mm')} + ' | 조회수: ' + ${post.views} + '회 | 좋아요 수: ' + ${post.likeCount} + '개'">시간</p>
+                    </div>
+                    <div class="right-content">
+                        <button th:onclick="|location.href='/api/post/' + ${post.id}|" class="btn-5">보러가기</button>
+                    </div>
+                </div>
+            </div>
+            <br>
+        </div>
+    </div>
+
+</div>
+<script>
 
     function my_page() {
         window.location.href = "/api/auth/login-page"; // mypage
     }
 
-    function deleteJwtCookie() {
-        const cookieName = 'Authorization'; // JWT가 저장된 쿠키의 이름
-        // 만료일을 예전 날짜로 설정하여 쿠키를 삭제합니다.
-        document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-    }
+    // const btn = document.getElementById("searching");
+    // btn.addEventListener('click', function () {
+    //     let input = $("#input").val();
+    //     console.log(input);
+    //
+    //     $.ajax({
+    //         type: "GET",
+    //         url:"/post/search?text=" + input,
+    //         success :  function (response, status, xhr) {
+    //             window.location.href = `http://localhost:8080`;
+    //         },
+    //         error : function (xhr, status, error) {
+    //             window.location.href = `http://localhost:8080`;
+    //         }
+    //     })
+    //
+    // });
 
-    // 페이지 로드 시 JWT 토큰 여부를 확인하여 로그인/로그아웃 버튼을 표시하거나 감추는 함수
     function toggleButtons() {
         const loginButton = document.getElementById('loginButton'); // 로그인 버튼 요소를 가져옴
         const logoutButton = document.getElementById('logoutButton'); // 로그아웃 버튼 요소를 가져옴
@@ -575,9 +781,76 @@
         return null; // JWT가 존재하지 않는 경우 null 반환
     }
 
+    // function goToMyPage() {
+    //     const jwtToken = getJwtFromCookie();
+    //     if (jwtToken) {
+    //         location.href = '/api/mypage';
+    //     } else {
+    //         location.href = '/dev/user/login-page';
+    //     }
+    // }
+
     // 페이지 로드 시 toggleButtons 함수를 호출하여 버튼 초기 상태를 설정
     toggleButtons();
+</script>
 
+</body>
+<script>
+    const host = 'http://' + window.location.host;
+
+    function logout() {
+        window.location.href = "/";
+        deleteJwtCookie();
+    }
+
+    function deleteJwtCookie() {
+        const cookieName = 'Authorization'; // JWT가 저장된 쿠키의 이름
+        // 만료일을 예전 날짜로 설정하여 쿠키를 삭제합니다.
+        document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+    }
+
+    // 페이지 로드 시 JWT 토큰 여부를 확인하여 로그인/로그아웃 버튼을 표시하거나 감추는 함수
+    function toggleButtons() {
+        const loginButton = document.getElementById('loginButton'); // 로그인 버튼 요소를 가져옴
+        const logoutButton = document.getElementById('logoutButton'); // 로그아웃 버튼 요소를 가져옴
+        const mypageButton = document.getElementById('mypageButton'); // 마이페이지 버튼 요소를 가져옴
+        const adminButton = document.getElementById('adminButton'); // 관리자페이지 버튼 요소를 가져옴
+
+        const jwtToken = getJwtFromCookie(); // Request 헤더에서 JWT 토큰을 가져옴
+
+        console.log(jwtToken);
+
+        if (jwtToken) {
+            loginButton.style.display = 'none'; // JWT 토큰이 존재하면 로그인 버튼을 감춤
+            logoutButton.style.display = 'inline'; // JWT 토큰이 존재하면 로그아웃 버튼을 표시
+            mypageButton.style.display = 'inline';
+            adminButton.style.display = 'inline';
+        } else {
+            loginButton.style.display = 'inline'; // JWT 토큰이 존재하지 않으면 로그인 버튼을 표시
+            logoutButton.style.display = 'none'; // JWT 토큰이 존재하지 않으면 로그아웃 버튼을 감춤
+            mypageButton.style.display = 'none';
+            adminButton.style.display = 'none';
+        }
+    }
+
+    function getJwtFromCookie() {
+        const cookieName = 'Authorization'; // JWT가 저장된 쿠키의 이름
+        const cookies = document.cookie.split(';');
+
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+
+            if (cookie.startsWith(`${cookieName}=`)) {
+                const jwtCookie = cookie.substring(cookieName.length + 1);
+                return jwtCookie;
+            }
+        }
+
+        return null; // JWT가 존재하지 않는 경우 null 반환
+    }
+
+    // 페이지 로드 시 toggleButtons 함수를 호출하여 버튼 초기 상태를 설정
+    toggleButtons();
 
 </script>
 </html>

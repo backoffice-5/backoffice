@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/128/1534/1534072.png" />
+
+    <!--    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
+
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.1.4/pagination.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR&display=swap" rel="stylesheet">
+
+    <title>Post</title>
+    <style>
+        * {
+            font-family: 'IBM Plex Sans KR', sans-serif;
+        }
+
+        body, html{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            overflow-x: hidden;
+            flex-direction: column;
+            background: rgb(255, 236, 244);
+            background: radial-gradient(circle, rgba(255, 236, 244, 1) 0%, rgba(236, 251, 255, 1) 100%);
+        }
+
+        body::-webkit-scrollbar {
+            margin-top: 5px;
+            margin-bottom: 5px;
+            width: 10px;
+        }
+
+        body::-webkit-scrollbar-track {
+            background-color: transparent;
+        }
+
+        body::-webkit-scrollbar-thumb {
+            border-radius: 3px;
+            background-color: #FFCACA;
+        }
+
+        body::-webkit-scrollbar-button {
+            width: 0;
+            height: 0;
+        }
+
+        .top, .bottom {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .header{
+            margin-top: 30px;
+            min-height: 30px;
+            width: 70%;
+            display: flex;
+            flex-direction: row;
+        }
+
+        .title{
+            display: flex;
+            justify-content: center;
+            margin: 0;
+        }
+
+        .title2{
+            display: flex;
+            justify-content: right;
+            margin: 0;
+        }
+
+        .content {
+            min-height: 300px;
+            width: 80%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .content p {
+            border-top: 1px solid #ffffff;
+            border-bottom: 1px solid #ffffff;
+            padding: 30px;
+            min-height: 280px;
+            width: 85%;
+            background-color: transparent;
+        }
+
+        .image {
+            height: 100%;
+            min-height: 75px;
+            min-width: 75px;
+            background-size: cover;
+            background-color: transparent;
+            background-image: url("https://cdn-icons-png.flaticon.com/128/3024/3024605.png");
+        }
+
+        .date {
+            width: 70%;
+            display: flex;
+            justify-content: center;
+            align-self: center;
+        }
+
+        .line {
+            margin-bottom: 10px;
+            height: 0.5px;
+            width: 90%;
+            background-color: #a9a9a9;
+        }
+
+        .card {
+            border-radius: 15px;
+            padding: 10px;
+            border: 2px solid #fff;
+            height: 130px;
+            margin-bottom: 10px;
+        }
+
+        .card-body p {
+            margin: 5px;
+        }
+
+        .cardarea {
+            width: 75%;
+        }
+
+        .checkbox-label,
+        .comment-checkbox-label {
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox-input,
+        .comment-checkbox-input {
+            position: absolute;
+            opacity: 0;
+            /*pointer-events: none;*/
+        }
+
+        .checkbox-image,
+        .comment-checkbox-image {
+            display: inline-block;
+            width: 20px; /* 이미지의 너비에 맞게 조절 */
+            height: 20px; /* 이미지의 높이에 맞게 조절 */
+            background-image: url("https://cdn-icons-png.flaticon.com/128/1077/1077035.png"); /* 이미지 경로 설정 */
+            background-size: cover; /* 이미지 크기에 맞게 조절 */
+            background-position: center; /* 이미지 위치 조절 */
+        }
+
+        .checkbox-input:checked + .checkbox-image,
+        .comment-checkbox-input:checked + .comment-checkbox-image {
+            /* 체크된 상태일 때의 이미지 스타일링 */
+            background-image: url("https://cdn-icons-png.flaticon.com/128/833/833472.png"); /* 체크된 이미지 경로 설정 */
+        }
+
+        .checkbox-text,
+        .comment-checkbox-text {
+            margin-left: 10px;
+        }
+
+        .comment {
+            margin-bottom: 10px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: row;
+        }
+
+        .comment input {
+            width: 60%;
+            color: #000;
+            display: block;
+            padding: 10px 20px;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            border: #fff solid 1px;
+        }
+
+        .comment button {
+            width: 10%;
+        }
+
+        button,
+        .mybuttons button{
+            font-weight: bold;
+            height: 25px;
+            color: darkslategrey;
+            border-radius: 5px;
+            background: #FFCACA;
+            background: linear-gradient(0deg, #FFCACA 0%, #FFB1B1 100%);
+            border: none;
+        }
+
+        button:before {
+            height: 0%;
+            width: 2px;
+        }
+
+        button:hover {
+            cursor: pointer;
+            box-shadow:  4px 4px 4px 0 rgba(255,255,255,.5),
+            -4px -4px 6px 0 rgba(116, 125, 136, .5),
+            inset -4px -4px 4px 0 rgba(255,255,255,.2),
+            inset 4px 4px 4px 0 rgba(0, 0, 0, .4);
+
+        }
+
+        .edit-form input{
+            width: 90%;
+            color:#000;
+            display:block;
+            padding:10px 20px;
+            margin: 15px;
+            border-radius:25px;
+            background:transparent;
+            border: #fff solid 2px;
+        }
+
+        .edit-form div{
+            width: 80%;
+            margin-left: 15px;
+        }
+
+        .mybuttons {
+            margin-bottom: 15px;
+        }
+
+        .mybutton{
+            margin: 10px auto;
+            display: flex;
+            justify-content: right;
+            width: 70%;
+        }
+
+    </style>
+</head>
+<body>
+<div class = "top">
+    <div class="mybutton">
+        <button id = "loginButton">로그인</button>
+        <button id = "logoutButton">로그아웃</button> <!--onclick="location.href='/api/logout'"-->
+    </div>
+
+    <div class="header">
+        <div th:id="${post.id}" ></div>
+        <div class="title1" style="flex:0.4;">
+            <h2 th:text="${post.title}">Title</h2>
+        </div>
+        <div class="title" style="flex:0.4;">
+            <h3 th:text="${post.nickname}">닉네임</h3>
+        </div>
+        <div class="title2" style="flex:0.2;">
+            <div class="image">
+            </div>
+        </div>
+    </div>
+
+    <div class = "date">
+        <h4 style="flex:1;" th:text="${#temporals.format(post.createAt, 'yyyy-MM-dd HH:mm')}">작성일</h4>
+
+        <div style="flex:1; display: flex; align-items:center; justify-content:end">
+            <h4 style="flex:0.5;" th:text="|조회수 ${post.views}|">조회수</h4>
+            <form onsubmit="return false;">
+                <label for="myCheckbox" class="checkbox-label">
+                    <input type="checkbox" id="myCheckbox" class="checkbox-input" onchange="handleCheckboxChange()"> <!--th:checked="${like == 'true'}"-->
+                    <span class="checkbox-image"></span>
+                    <span class="checkbox-text" th:text="${post.likeCount}"></span>  <!--th:text="${post.likeCount}"-->
+                </label>
+            </form>
+        </div>
+    </div>
+
+    <div class="content">
+        <p th:text="${post.content}">content</p>
+    </div>
+
+    <div class="mybuttons">
+        <button th:onclick="|location.href='@{/api/post(id=${post.id})}'|">글 수정</button>
+        <button onclick="location.href='/'">메인</button>
+        <button onclick="onDelete()">글 삭제</button>
+    </div>
+</div>
+
+<div class = "line">
+
+</div>
+
+<div class="bottom">
+    <div class="comment">
+        <input type="commentName" class="form-control" id="commentName" placeholder="댓글 내용" style="margin-right:10px"/>
+        <button type="button" class="btn-danger" onclick="save_comment()">
+            등록하기
+        </button>
+    </div>
+
+    <div class="cardarea">
+        <div class="mycards" id="comment-list"  th:each="comment : ${comments}">
+            <div class="card" id="card">
+                <div class="card-body" style="display: flex;">
+                    <div card style="width: 90%">
+                        <p id="commentName_" th:text="${comment.nickname}">유저이름</p>
+                        <p id="commentContent_" th:text="${comment.commentcontents}">댓글내용</p>
+                        <p id="commentDate_" th:text="|댓글 작성일: ${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}|" class="blockquote-footer">date</p>
+                    </div>
+                    <div style="width: 10%; display: flex; justify-content: center; align-items: center; float:right;">
+                        <form onsubmit="return false;">
+                            <label class="comment-checkbox-label">
+                                <input type="checkbox" class="comment-checkbox-input" th:id="${comment.id}" th:checked="${comment.like == 'true'}" > <!-- "${comment.liked}"-->
+                                <span class="comment-checkbox-image"></span>
+                                <span class="comment-checkbox-text" th:text="${comment.commentlikeCount}">00</span>
+                            </label>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card-button" id = "card-button">
+                    <button class = "button_ud" id="button_ud">수정</button>
+                    <button class = "button_del" th:id="${comment.id}">삭제</button>
+                </div>
+
+                <div class="edit-form" style="display: none">
+                    <input id="updatecomment_" th:placeholder="${comment.commentcontents}"/>
+                    <button class="submit-btn" th:id="${comment.id}">저장</button>
+                    <button class="cancel-btn">취소</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    let url = window.location.href;
+    let postid = url.replace("http://localhost:8080/api/post/", "");
+
+    var like = [[${like}]]; // 서버에서 전달된 like 값을 가져옵니다.
+
+    // 페이지 로딩 후 실행되는 함수
+    window.onload = function() {
+        var checkbox = document.getElementById('myCheckbox');
+        if (like) {
+            checkbox.checked = true; // like 값이 true인 경우 체크박스 선택
+        } else {
+            checkbox.checked = false; // like 값이 false인 경우 체크박스 선택 해제
+        }
+    };
+
+    // 페이지 로드 시 JWT 토큰 여부를 확인하여 로그인/로그아웃 버튼을 표시하거나 감추는 함수
+    function toggleButtons() {
+        const loginButton = document.getElementById('loginButton'); // 로그인 버튼 요소를 가져옴
+        const logoutButton = document.getElementById('logoutButton'); // 로그아웃 버튼 요소를 가져옴
+
+        const jwtToken = getJwtFromCookie(); // Request 헤더에서 JWT 토큰을 가져옴
+
+        if (jwtToken) {
+            loginButton.style.display = 'none'; // JWT 토큰이 존재하면 로그인 버튼을 감춤
+            logoutButton.style.display = 'inline'; // JWT 토큰이 존재하면 로그아웃 버튼을 표시
+        } else {
+            loginButton.style.display = 'inline'; // JWT 토큰이 존재하지 않으면 로그인 버튼을 표시
+            logoutButton.style.display = 'none'; // JWT 토큰이 존재하지 않으면 로그아웃 버튼을 감춤
+        }
+    }
+
+    function getJwtFromCookie() {
+        const cookieName = 'Authorization'; // JWT가 저장된 쿠키의 이름
+        const cookies = document.cookie.split(';');
+
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+
+            if (cookie.startsWith(`${cookieName}=`)) {
+                const jwtCookie = cookie.substring(cookieName.length + 1);
+                return jwtCookie;
+            }
+        }
+
+        return null; // JWT가 존재하지 않는 경우 null 반환
+    }
+
+    // 게시글 삭제
+    function onDelete() {
+        let url = window.location.href;
+        let id = url.replace("http://localhost:8080/api/post/", "");
+        console.log(id);
+
+        $.ajax({
+            type: "DELETE",
+            url: `/api/post/${id}`,
+            contentType: "application/json",
+            success: function(response, status, xhr) {
+                if (xhr.status === 200) {
+                    // 요청이 성공한 경우 처리할 로직을 작성합니다.
+                    console.log("DELETE 요청이 성공했습니다.");
+
+                    alert("삭제 완료!");
+                    window.location.href = "http://localhost:8080";
+                } else {
+                    alert("작성자만 삭제 가능합니다");
+                    window.location.href = `http://localhost:8080/api/post/${id}`;
+                }
+            },
+            error: function(xhr, status, error) {
+                // 요청이 실패한 경우 처리할 로직을 작성합니다.
+                console.log("DELETE 요청이 실패했습니다.");
+                console.log(xhr.responseText);
+                alert("DELETE 실패!");
+                window.location.href = `http://localhost:8080/api/post/${id}`;
+            }
+        });
+    }
+
+    // 댓글 등록
+    function save_comment() {
+        let commentcontents = $("#commentName").val();
+        let url = window.location.href;
+        let id = url.replace("http://localhost:8080/api/post/", "");
+        console.log(id);
+        console.log(commentcontents);
+
+        $.ajax({
+            type : "POST",
+            url: `/api/post/${id}/comment`,
+            contentType: "application/json",
+            data: JSON.stringify({commentcontents: commentcontents}),
+            success: function (response, status, xhr) {
+                if(xhr.status == 200) {
+                    alert("댓글 작성 완료");
+                } else {
+                    alert("댓글 작성 실패");
+                }
+                window.location.href = `http://localhost:8080/api/post/${id}`;
+            },
+            error: function (xhr, status, error) {
+                alert("댓글 작성 실패 !");
+                window.location.href = `http://localhost:8080/api/post/${id}`;
+            }
+        })
+
+    } // save_comment()
+
+    const submitBtns = document.querySelectorAll('#button_ud');
+    const deleteBtns = document.querySelectorAll('.button_del');
+    const updateBtns = document.querySelectorAll('.submit-btn');
+    const calcenBtns = document.querySelectorAll('.cancel-btn');
+
+    // 댓글 삭제하기
+    deleteBtns.forEach(button => {
+        button.addEventListener('click', function () {
+            // id는 postid값임
+            let url = window.location.href;
+            let id = url.replace("http://localhost:8080/api/post/", "");
+            console.log(id);
+
+            let commentId = button.id; // comment.id 값을 가져옴
+            console.log(commentId);
+
+            $.ajax({
+                type: "DELETE",
+                url: `/api/post/${id}/comment/${commentId}`,
+                contentType: "application/json",
+                success: function(response, status, xhr) {
+                    // 서버 응답이 성공적으로 왔을 때 처리
+                    if (xhr.status === 200) {
+                        // 서버의 상태 코드가 200(성공)인 경우
+                        alert("삭제 성공");
+                    } else {
+                        // 다른 상태 코드에 따라 처리
+                        alert("삭제 실패");
+                    }
+                    window.location.href = `http://localhost:8080/api/post/${id}`;
+                },
+                error: function(xhr, status, error) {
+                    // 요청이 실패한 경우 처리할 로직을 작성합니다.
+                    console.log("DELETE 요청이 실패했습니다.");
+                    console.log(xhr.responseText);
+                    alert("삭제 요청 실패 !!");
+                    window.location.href = `http://localhost:8080/api/post/${id}`;
+                }
+            });
+
+        })
+    });
+
+    // 수정 페이지 안보이게 하기
+    calcenBtns.forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.preventDefault(); // 폼의 기본 제출 동작 방지
+
+            // 현재 버튼과 관련된 .card 요소 찾기
+            const card = button.closest('.card');
+
+            // .card-body와 .card-button 요소를 가져옵니다.
+            const cardBody = card.querySelector('.card-body');
+            const cardButton = card.querySelector('.card-button');
+
+            // .card-body와 .card-button 요소를 토글합니다.
+            if (cardBody.style.display === 'none') {
+                cardBody.style.display = 'block';
+                cardButton.style.display = 'block';
+            } else {
+                cardBody.style.display = 'none';
+                cardButton.style.display = 'none';
+            }
+
+            // .edit-form 요소를 가져옵니다.
+            const editForm = card.querySelector('.edit-form');
+
+            // .edit-form 요소의 표시 상태를 변경합니다.
+            if (editForm.style.display === 'none') {
+                editForm.style.display = 'block';
+            } else {
+                editForm.style.display = 'none';
+            }
+        })
+    });
+
+    // 댓글 수정 부분 보이게 하기
+    submitBtns.forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.preventDefault(); // 폼의 기본 제출 동작 방지
+
+            // 현재 버튼과 관련된 .card 요소 찾기
+            const card = button.closest('.card');
+
+            // .card-body와 .card-button 요소를 가져옵니다.
+            const cardBody = card.querySelector('.card-body');
+            const cardButton = card.querySelector('.card-button');
+
+            // .card-body와 .card-button 요소를 토글합니다.
+            if (cardBody.style.display === 'none') {
+                cardBody.style.display = 'block';
+                cardButton.style.display = 'block';
+            } else {
+                cardBody.style.display = 'none';
+                cardButton.style.display = 'none';
+            }
+
+            // .edit-form 요소를 가져옵니다.
+            const editForm = card.querySelector('.edit-form');
+
+            // .edit-form 요소의 표시 상태를 변경합니다.
+            if (editForm.style.display === 'none') {
+                editForm.style.display = 'block';
+            } else {
+                editForm.style.display = 'none';
+            }
+        })
+    });
+
+    // 댓글 수정하기
+    updateBtns.forEach(button => {
+        button.addEventListener('click', function () {
+            const form = button.closest('.edit-form');
+            const updatecommentInput = form.querySelector('#updatecomment_');
+            const value = updatecommentInput.value;
+
+            // id는 postid값임
+            let url = window.location.href;
+            let id = url.replace("http://localhost:8080/api/post/", "");
+            console.log(id);
+
+            let commentId = button.id; // comment.id 값을 가져옴
+            console.log(commentId);
+
+            console.log(value);
+
+            $.ajax({
+                type: "PUT",
+                url: `/api/post/${id}/comment/${commentId}`,
+                contentType: "application/json",
+                data: JSON.stringify({commentcontents: value}),
+                success: function(response, status, xhr) {
+
+                    // 요청이 성공한 경우 처리할 로직을 작성합니다.
+                    console.log("PUT 요청이 성공했습니다.");
+
+                    // 서버 응답이 성공적으로 왔을 때 처리
+                    if (xhr.status === 200) {
+                        // 서버의 상태 코드가 200(성공)인 경우
+                        alert("수정 완료");
+                    } else {
+                        alert("수정 실패 !");
+                    }
+                    window.location.href = `http://localhost:8080/api/post/${id}`;
+                },
+                error: function(xhr, status, error) {
+                    // 요청이 실패한 경우 처리할 로직을 작성합니다.
+                    console.log("PUT 요청이 실패했습니다.");
+                    console.log(xhr.responseText);
+                    alert("수정 요청 실패 !!");
+                    window.location.href = `http://localhost:8080/api/post/${id}`;
+                }
+            });
+
+        })
+    });
+
+    function handleCheckboxChange() {
+        var checkbox = document.getElementById('myCheckbox');
+
+        if (checkbox.checked) {
+            onHeartAdd();
+        } else {
+            onHeartDelete();
+        }
+    }
+    function onHeartAdd() {
+        let url = window.location.href;
+        let id = url.replace("http://localhost:8080/api/post/", "");
+        console.log(id);
+
+        $.ajax({
+            type: "POST",
+            url: `/api/post/${id}/like`,
+            success: function (response, status, xhr) {
+                // 요청이 성공한 경우 처리할 로직을 작성합니다.
+                console.log("POST 요청이 성공했습니다.");
+                if (xhr.status === 200) {
+                    // 서버의 상태 코드가 200(성공)인 경우
+                    window.location.href = `http://localhost:8080/api/post/${id}`
+                } else {
+                    // 다른 상태 코드에 따라 처리
+                    alert("좋아요 실패");
+                    window.location.href =  `http://localhost:8080/api/post/${id}`
+                }
+            },
+            error: function (xhr, status, error) {
+                // 요청이 실패한 경우 처리할 로직을 작성합니다.
+                console.log("POST 요청이 실패했습니다.");
+                console.log(xhr.responseText);
+                alert("본인의 게시글에는 좋아요를 누를 수 없습니다");
+                window.location.href =  `http://localhost:8080/api/post/${id}`
+            }
+        });
+    }
+
+    function onHeartDelete() {
+        let url = window.location.href;
+        let id = url.replace("http://localhost:8080/api/post/", "");
+        console.log(id);
+
+        $.ajax({
+            type: "PUT",
+            url: `/api/post/${id}/like`,
+            success: function(response, status, xhr) {
+                // 요청이 성공한 경우 처리할 로직을 작성합니다.
+                console.log("DELETE 요청이 성공했습니다.");
+                window.location.href =  `http://localhost:8080/api/post/${id}`;
+            },
+            error: function(xhr, status, error) {
+                // 요청이 실패한 경우 처리할 로직을 작성합니다.
+                console.log("DELETE 요청이 실패했습니다.");
+                console.log(xhr.responseText);
+                window.location.href =  `http://localhost:8080/api/post/${id}`;
+            }
+        });
+    }
+
+    const checkboxes = document.querySelectorAll('.comment-checkbox-input');
+    checkboxes.forEach(function(checkbox) {
+        checkbox.addEventListener('change', checkboxchange);
+    });
+
+    function checkboxchange(event) {
+        const checkbox = event.target;
+        const id = checkbox.id; // 체크박스의 ID에서 숫자 부분 추출
+        console.log(id);
+
+        // 위에서 찍은 postid
+        if (checkbox.checked) {
+            // 체크되었을 때 수행할 API 호출 코드를 작성합니다.
+            console.log(`API 호출: 체크됨, ID: ${id}`);
+            // API 호출 로직을 추가하세요.
+            onCommentHeartAdd(id);
+        } else {
+            // 체크 해제되었을 때 수행할 API 호출 코드를 작성합니다.
+            console.log(`API 호출: 해제됨, ID: ${id}`);
+            // API 호출 로직을 추가하세요.
+            onCommentHeartDelete(id);
+        }
+    }
+
+    function onCommentHeartDelete(commentid) {
+
+        $.ajax({
+            type: "PUT",
+            url: `/api/post/${postid}/comment/` + commentid + "/like",
+            success: function(response, status, xhr) {
+                // 요청이 성공한 경우 처리할 로직을 작성합니다.
+                console.log("DELETE 요청이 성공했습니다.");
+                window.location.href =  `http://localhost:8080/api/post/${postid}`;
+            },
+            error: function(xhr, status, error) {
+                // 요청이 실패한 경우 처리할 로직을 작성합니다.
+                console.log("DELETE 요청이 실패했습니다.");
+                console.log(xhr.responseText);
+                window.location.href =  `http://localhost:8080/api/post/${postid}`;
+            }
+        });
+    }
+
+    function onCommentHeartAdd(commentid) {
+        let url = window.location.href;
+        let id = url.replace("http://localhost:8080/dev/post/", "");
+        console.log(id);
+
+        $.ajax({
+            type: "POST",
+            url: `/api/post/${postid}/comment/` + commentid + "/like",
+            success: function (response, status, xhr) {
+                // 요청이 성공한 경우 처리할 로직을 작성합니다.
+                console.log("POST 요청이 성공했습니다.");
+                if (xhr.status === 200) {
+                    // 서버의 상태 코드가 200(성공)인 경우
+                    window.location.href = `${postid}`;
+                } else {
+                    alert("작성자는 좋아요를 누를 수 없습니다");
+                }
+                window.location.href = `${postid}`;
+            },
+            error: function (xhr, status, error) {
+                // 요청이 실패한 경우 처리할 로직을 작성합니다.
+                console.log("POST 요청이 실패했습니다.");
+                console.log(xhr.responseText);
+                alert("작성자는 좋아요를 누를 수 없습니다");
+                window.location.href = `${postid}`;
+            }
+        });
+    }
+
+    // 페이지 로드 시 toggleButtons 함수를 호출하여 버튼 초기 상태를 설정
+    toggleButtons();
+</script>
+</html>

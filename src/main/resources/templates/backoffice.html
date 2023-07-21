@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <style>
+    .toggle-content {
+      display: none; /* 초기에 숨김 */
+      text-align: center; /* 수평 중앙 */
+
+      width: 80%;
+      height: 80%;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+
+      overflow-y: auto; /* 내용이 넘칠 경우 수직 스크롤이 추가됩니다. */
+
+      border-radius: 10px;
+      box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.17);
+    }
+  </style>
+
+  <script>
+    window.onload = function() {
+      getPostData();
+      getCommentData();
+    }
+
+    // 게시글 목록 가져오기
+    function getPostData() {
+      fetch('/api/posts/createAt', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+              .then(response => response.json())
+              .then(data => {
+                for (let i = 0; i < data.length; i++) {
+                  // console.log(data[i]);
+
+                  let id = data[i].id;
+                  let title = data[i].title;
+                  let nickname = data[i].nickname;
+                  let commentCount = data[i].commentCount;
+                  let likeCount = data[i].likeCount;
+                  let views = data[i].views;
+
+                  let temp_html = `<div id="post ${id}">
+                                        <span>닉네임: ${nickname}</span>
+                                        <span>제목: ${title}</span>
+                                        <span>댓글수: ${commentCount}</span>
+                                        <span>좋아요수: ${likeCount}</span>
+                                        <span>조회수: ${views}</span>
+                                        <button>수정</button>
+                                        <button onclick="deletePost(${id})">삭제</button>
+                                   </div>
+                                   `;
+
+                  $('#content1').append(temp_html);
+                }
+              })
+              .catch(error => {
+                // 오류 처리 로직을 작성합니다.
+                console.error(error);
+              });
+    }
+
+    function deletePost(id) {
+      let url = '/api/post/' + id
+      console.log(url)
+      fetch(url, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
+      .catch(error => {
+        // 에러 처리
+        console.error('댓글 삭제 중 오류가 발생했습니다.', error);
+      });
+    }
+
+    //댓글 목록 가져오기
+    function getCommentData() {
+      fetch('/api/post/comments', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+              .then(response => response.json())
+              .then(data => {
+                for (let i = 0; i < data.length; i++) {
+                  console.log(data[i]);
+
+                  let postTitle = data[i].postTitle;
+                  let username = data[i].username;
+                  let nickname = data[i].nickname;
+                  let commentContent = data[i].commentcontents;
+
+                  let temp_html = `<div>
+                                        <span>글 제목: ${postTitle}</span>
+                                        <span>유저id: ${username}</span>
+                                        <span>유저별명: ${nickname}</span>
+                                        <span>댓글 내용: ${commentContent}</span>
+                                        <button>수정</button>
+                                        <button>삭제</button>
+                                    </div>`;
+
+                  $('#content2').append(temp_html);
+                }
+              })
+              .catch(error => {
+                // 오류 처리 로직을 작성합니다.
+                console.error(error);
+              });
+    }
+
+    //회원목록 가져오기
+
+  </script>
+</head>
+<body>
+<button id="toggle-button1">게시글 수정,삭제</button>
+<button id="toggle-button2">댓글 수정,삭제</button>
+<button id="toggle-button3">회원정보 수정,삭제</button>
+
+<div id="content1" class="toggle-content">
+<!--  게시글 수정,삭제를 위한 토글-->
+
+</div>
+
+<div id="content2" class="toggle-content">
+  댓글 수정,삭제를 위한 토글
+</div>
+
+<div id="content3" class="toggle-content">
+  회원정보 수정,삭제를 위한 토글
+</div>
+
+<script>
+</script>
+
+<script>
+  const toggleButton1 = document.getElementById("toggle-button1");
+  const toggleButton2 = document.getElementById("toggle-button2");
+  const toggleButton3 = document.getElementById("toggle-button3");
+
+  const content1 = document.getElementById("content1");
+  const content2 = document.getElementById("content2");
+  const content3 = document.getElementById("content3");
+
+  function toggleContent1() {
+    content1.style.display = (content1.style.display === "none") ? "block" : "none";
+  }
+
+  function toggleContent2() {
+    content2.style.display = (content2.style.display === "none") ? "block" : "none";
+  }
+
+  function toggleContent3() {
+    content3.style.display = (content3.style.display === "none") ? "block" : "none";
+  }
+
+  toggleButton1.addEventListener("click", toggleContent1);
+  toggleButton2.addEventListener("click", toggleContent2);
+  toggleButton3.addEventListener("click", toggleContent3);
+</script>
+</body>
+</html>

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>post</title>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.1.4/pagination.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            font-family: 'IBM Plex Sans KR', sans-serif;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background: rgb(255, 236, 244);
+            background: radial-gradient(circle, rgba(255, 236, 244, 1) 0%, rgba(236, 251, 255, 1) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        h1{
+            margin : 0;
+            color: #333333;
+
+        }
+
+        .header{
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 15%;
+            font-size: 25px;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .line{
+            margin: 0;
+            width: 90%;
+            height: 0.1%;
+            background: #000000;
+        }
+
+        .bottom {
+            margin-top: 0;
+            width: 100%;
+            align-items: center;
+            justify-self: center;
+            height: 79.9%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        button {
+            height: 30px;
+            width: 70px;
+            color: darkslategrey;
+            border-radius: 5px;
+            background: #FFCACA;
+            background: linear-gradient(0deg, #FFCACA 0%, #FFB1B1 100%);
+            border: none;
+        }
+
+        button:before {
+            height: 0%;
+            width: 2px;
+        }
+
+        button:hover {
+            cursor: pointer;
+            box-shadow:  4px 4px 4px 0 rgba(255,255,255,.3),
+            -4px -4px 6px 0 rgba(116, 125, 136, .3),
+            inset -4px -4px 4px 0 rgba(255,255,255,.2),
+            inset 4px 4px 4px 0 rgba(0, 0, 0, .3);
+
+        }
+
+        .logoutbtn{
+            width: 66%;
+            height: 15%;
+            margin: 10px auto 0;
+            align-items: center;
+            display: flex;
+            justify-items: center;
+            text-align: right;
+            justify-content: flex-end;
+        }
+
+        .row{
+            align-items: center;
+            justify-self: center;
+            margin-top: 10px;
+            width: 80%;
+            height: 74.5%;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        article{
+            width: 80%;
+            min-height: 450px;
+            height: 85%;
+            padding: 20px;
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+            color: #000;
+            display: flex;
+            justify-self: center;
+        }
+
+        .bottompost{
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .buttons{
+            position: fixed;
+            bottom: 20px;
+            height: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        button:nth-child(1) {
+            margin-right: 20px;
+        }
+
+        .form-control{
+            width: 100%;;
+        }
+
+        .input {
+            flex-direction: column;
+            display: flex;
+            justify-self: center;
+            align-items: center;
+            width: 100%;
+            height: 90%;
+        }
+
+        .input input,
+        .input textarea {
+            width: 100%;
+        }
+
+        input {
+            font-size: 18px;
+            color: #222222;
+            width: 100%;
+            border: none;
+            border-bottom: solid #aaaaaa 1px;
+            padding-bottom: 10px;
+            padding-left: 10px;
+            position: relative;
+            background: none;
+            z-index: 5;
+            margin-bottom: 15px;
+            margin-top: 15px;
+        }
+
+        input:focus { outline: none; }
+
+        textarea{
+            border: none;
+            font-size: 16px;
+            padding: 10px;
+            resize: none;
+            height: 100%;
+            background: transparent;
+        }
+
+        textarea:focus {   outline: none; }
+
+        header, section {
+            width: 80%;
+        }
+
+    </style>
+    <script>
+        function onUpdate() {
+            let params = new URLSearchParams(location.search);
+            let id = params.get('id');
+
+            let title = $('#title').val();
+            let content = $('#content').val();
+            var checkbox = document.getElementById('anonymous');
+            var anonymous = false;
+            if (checkbox.checked) {
+                anonymous = true;
+            }else {
+                anonymous = false;
+            }
+
+            $.ajax({
+                type: "PUT",
+                url: `/api/post/${id}`,
+                contentType: "application/json",
+                data: JSON.stringify({title: title, content: content, anonymous: anonymous}),
+                success: function(response, status, xhr) {
+                    // 요청이 성공한 경우 처리할 로직을 작성합니다.
+                    console.log("PUT 요청이 성공했습니다.");
+
+                    // 서버 응답이 성공적으로 왔을 때 처리
+                    if (xhr.status === 200) {
+                        alert("게시글 수정 완료");
+                    } else {
+                        alert("게시글 수정 실패");
+                    } window.location.href = `http://localhost:8080/api/post/${id}`;
+                },
+                error: function(xhr, status, error) {
+                    // 요청이 실패한 경우 처리할 로직을 작성합니다.
+                    console.log("POST 요청이 실패했습니다.");
+                    console.log(xhr.responseText);
+                    alert("작성자만 수정 가능합니다.")
+                    window.location.href = `http://localhost:8080/api/post/${id}`;
+                }
+            });
+        }
+
+        function onCreate() {
+            let title = $('#title').val();
+            let content = $('#content').val();
+            var checkbox = document.getElementById('anonymous');
+            var anonymous = false;
+            if (checkbox.checked) {
+                anonymous = true;
+            }else {
+                anonymous = false;
+            }
+
+            console.log(title, content, anonymous);
+
+            $.ajax({
+                type: "POST",
+                url: "/api/post",
+                contentType: "application/json",
+                data: JSON.stringify({title: title, content: content, anonymous: anonymous}),
+                success: function(response, status, xhr) {
+                    // 요청이 성공한 경우 처리할 로직을 작성합니다.
+                    console.log("POST 요청이 성공했습니다.");
+
+                    // 서버 응답이 성공적으로 왔을 때 처리
+                    if (xhr.status === 200) {
+                        alert("게시글 작성 완료");
+                    } else {
+                        alert("게시글 작성 실패");
+                    } window.location.href = "http://localhost:8080";
+                },
+                error: function(xhr, status, error) {
+                    // 요청이 실패한 경우 처리할 로직을 작성합니다.
+                    console.log("POST 요청이 실패했습니다.");
+                    console.log(xhr.responseText);
+                    alert("게시글 작성 실패");
+                }
+            });
+        }
+
+    </script>
+
+</head>
+<body>
+<div class="header">
+    게시글
+<!--    <h1 class="title1"> 게시글 </h1>-->
+</div>
+<div class = "line"> </div>
+<div class="bottom">
+    <div class = "logoutbtn">
+        <button id="logoutbtn" href = "#" onclick="location.href='/logout'">
+            로그아웃
+        </button>
+    </div>
+    <div class="row">
+        <div class="bottompost">
+            <article>
+                <input type="hidden"  th:value="${post.id}"> <!--id="post-id"-->
+                <div class="input">
+                    <header class="mb-4">
+                        <input type="text" class="form-control" placeholder="제목" id="title" th:value="${post.title}">
+                    </header>
+                    <section class="mb-5">
+                        <textarea class="form-control h-25" rows="10" placeholder="내용" id="content" th:text="${post.content}"></textarea>
+                    </section>
+                </div>
+                <div class="check">
+                    <input type="checkbox" id="anonymous" name="anonymous" th:checked="${post.anonymous}">익명
+                </div>
+                <div class="buttons">
+                    <button th:if="${post.id} != null" onclick="onUpdate()" type="button" id="modify-btn" class="btn btn-primary btn-sm">수정</button>
+                    <button th:if="${post.id} == null" onclick="onCreate()" type="button" id="create-btn" class="btn btn-primary btn-sm">등록</button>
+                </div>
+            </article>
+        </div>
+    </div>
+</div>
+</body>
+</html>
