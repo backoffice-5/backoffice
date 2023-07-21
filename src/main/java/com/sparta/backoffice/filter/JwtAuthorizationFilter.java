@@ -1,23 +1,14 @@
 package com.sparta.backoffice.filter;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.backoffice.dto.StatusResponseDto;
-import com.sparta.backoffice.entity.UserRoleEnum;
 import com.sparta.backoffice.jwt.JwtUtil;
-import com.sparta.backoffice.security.UserDetailsImpl;
-
-import com.sparta.backoffice.jwt.JwtUtil;
-
 import com.sparta.backoffice.security.UserDetailsServiceImpl;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-import org.springframework.http.HttpStatus;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
