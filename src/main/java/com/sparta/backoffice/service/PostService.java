@@ -37,30 +37,45 @@ public class PostService {
     }
 
     //게시글 전체조회: 제목, 닉네임, 댓글수, 좋아요수, 조회수만 List형태로 만들어 return 한다.
+    public List<PostResponseDto> getPosts(String method) {
+        List<PostResponseDto> postResponseDtoList;
+
+        // method 값에 따라 가져오는 방식이 다름
+        if (method.equals("latest")) {
+            postResponseDtoList = postRepository.findAllByOrderByCreatedAtDesc().stream().map(PostResponseDto::new).toList();
+        } else if (method.equals("views")) {
+            postResponseDtoList = postRepository.findAllByOrderByViewsDesc().stream().map(PostResponseDto::new).toList();
+        } else if (method.equals("likes")) {
+            postResponseDtoList = postRepository.findAllByOrderByLikeCountDesc().stream().map(PostResponseDto::new).toList();
+        } else if (method.equals("comments")) {
+            postResponseDtoList = postRepository.findAllByOrderByCommentCountDesc().stream().map(PostResponseDto::new).toList();
+        } else {
+            throw new IllegalArgumentException("올바른 url이 아닙니다.");
+        }
+        return postResponseDtoList;
+    }
+
+    //게시글 전체조회: 제목, 닉네임, 댓글수, 좋아요수, 조회수만 List형태로 만들어 return 한다.
     public List<PostResponseDto> getAllPost(String method) {
         List<PostResponseDto> postResponseDtoList = new ArrayList<>();
         List<Post> postList;
 
         // PathVariable로 기준을 정해서 그 기준으로 가져오게끔 했음
         if (method.equals("createAt")) {
-            postResponseDtoList = postRepository.findAllByOrderByCreatedAtDesc().stream().map(PostResponseDto::new).toList();
-//            postList = postRepository.findAllByOrderByCreatedAtDesc();
+            postList = postRepository.findAllByOrderByCreatedAtDesc();
         } else if (method.equals("views")) {
-            postResponseDtoList = postRepository.findAllByOrderByViewsDesc().stream().map(PostResponseDto::new).toList();
-//            postList = postRepository.findAllByOrderByViewsDesc();
+            postList = postRepository.findAllByOrderByViewsDesc();
         } else if (method.equals("likes")) {
-            postResponseDtoList = postRepository.findAllByOrderByLikeCountDesc().stream().map(PostResponseDto::new).toList();
-//            postList = postRepository.findAllByOrderByLikeCountDesc();
+            postList = postRepository.findAllByOrderByLikeCountDesc();
         } else if (method.equals("comment")) {
-            postResponseDtoList = postRepository.findAllByOrderByCommentCountDesc().stream().map(PostResponseDto::new).toList();
-//            postList = postRepository.findAllByOrderByCommentCountDesc();
+            postList = postRepository.findAllByOrderByCommentCountDesc();
         } else {
             throw new IllegalArgumentException("올바른 url이 아닙니다.");
         }
 
-//        for (Post post: postList) {
-//            postResponseDtoList.add(new PostsResponseDto(post));
-//        }
+        for (Post post: postList) {
+            postResponseDtoList.add(new PostResponseDto(post));
+        }
 
         return postResponseDtoList;
     }

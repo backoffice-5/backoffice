@@ -15,8 +15,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 import java.util.List;
 import java.util.Optional;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 import static com.sparta.backoffice.entity.UserRoleEnum.ADMIN;
 
@@ -138,5 +143,14 @@ public class CommentService {
 
     private Optional<CommentLike> findCommentLike(Comment comment, User user) {
         return commentLikeRepository.findByCommentAndUser(comment, user);
+    }
+
+    public List<CommentResponseDto> getAllComment() {
+        List<Comment> commentList = commentRepository.findAll();
+        List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
+        for (int i = 0; i < commentList.size(); i++) {
+            commentResponseDtoList.add(new CommentResponseDto(commentList.get(i)));
+        }
+        return commentResponseDtoList;
     }
 }

@@ -1,18 +1,24 @@
 package com.sparta.backoffice.filter;
 
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.backoffice.dto.StatusResponseDto;
 import com.sparta.backoffice.entity.UserRoleEnum;
 import com.sparta.backoffice.jwt.JwtUtil;
 import com.sparta.backoffice.security.UserDetailsImpl;
+
+import com.sparta.backoffice.jwt.JwtUtil;
+
 import com.sparta.backoffice.security.UserDetailsServiceImpl;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -34,13 +40,10 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         this.userDetailsService = userDetailsService;
     }
 
-    /*
-     * 모든 요청을 필터링하고 JWT 의 유효성을 검사하는 메서드
-     */
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain) throws ServletException, IOException {
 
-        String tokenValue = jwtUtil.getTokenFromRequest(request);
+        String tokenValue = jwtUtil.getTokenFromRequest(req);
 
         if (StringUtils.hasText(tokenValue)) {
             // JWT 토큰 substring
@@ -62,7 +65,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             }
         }
 
-        filterChain.doFilter(request, response);
+        filterChain.doFilter(req, res);
+
     }
 
     // 인증 처리
@@ -78,20 +82,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     private Authentication createAuthentication(String username) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-    }
-
-    public void deleteAuthentication(HttpServletResponse response, Authentication authResult) throws IOException, ServletException {
-        log.info("로그아웃 시도");
-        String username = ((UserDetailsImpl) authResult.getPrincipal()).getUsername();
-        UserRoleEnum role = UserRoleEnum.USER;
-
-        if (((UserDetailsImpl) authResult.getPrincipal()).getUser().getRole().equals(UserRoleEnum.ADMIN)) {
-            role = UserRoleEnum.ADMIN;
-        }
-
-        String token = jwtUtil.createToken(username, role);
-        jwtUtil.deleteCookie(token, response);
-        response.sendRedirect("/api/auth/login-page"); // "/"로 리다이렉트
     }
 
 }

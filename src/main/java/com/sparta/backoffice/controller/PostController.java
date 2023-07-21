@@ -49,4 +49,15 @@ public class PostController {
             return ResponseEntity.badRequest().body("본인의 게시글만 삭제할 수 있습니다.");
         }
     }
+
+    @GetMapping("/posts/{method}")
+    public List<PostResponseDto> getAllPost(@PathVariable String method) {
+        return postService.getAllPost(method);
+    }
+
+    //게시글 검색
+//    @GetMapping("/post")
+//    public List<PostsResponseDto> searchPost(@RequestParam String text) {
+//        return postService.searchPost(text);
+//    }
 }

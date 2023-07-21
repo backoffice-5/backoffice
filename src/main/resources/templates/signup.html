@@ -37,10 +37,6 @@
                 </div>
                 <div class="hr"></div>
 
-                <!--                <div class="group">-->
-                <!--                    <button class="buttons" value="카카오 로그인">카카오 로그인</button>-->
-                <!--                </div>-->
-
             </div>
             <div class="sign-up-htm">
                 <div class="group">
@@ -59,8 +55,8 @@
                 <div class="group">
                     <input id="admin-check" type="checkbox" name="admin" onclick="toggleAdminSection()"
                            style="margin-top: 40px;">관리자
-                    <input id="admin-token" type="password" name="adminToken" placeholder="관리자 암호"
-                           class="login-input-box" style="display:none">
+                    <input id="admin-token" type="password" name="adminToken" placeholder="admin password"
+                           class="login-input-box" style="display:none; width:380px; height:45px; border-radius:20px;">
                 </div>
                 <div class="group">
                     <button id="login-id-submit" onclick="signup()">Sign Up</button>
@@ -94,13 +90,14 @@
         return null; // JWT가 존재하지 않는 경우 null 반환
     }
     function toggleAdminSection() {
-        var adminSection = document.getElementById("admin-section");
-        var adminCheckbox = document.getElementById("admin-check");
 
-        if (adminCheckbox.checked) {
-            adminSection.style.display = "block";
+        var checkBox = document.getElementById("admin-check");
+        var box = document.getElementById("admin-token");
+
+        if (checkBox.checked) {
+            box.style.display = "block";
         } else {
-            adminSection.style.display = "none";
+            box.style.display = "none";
         }
     }
 
@@ -129,16 +126,18 @@
                 admin: isAdmin
             }),
             contentType: 'application/json',
-            success: function (response, status, xhr) {
-                if (xhr.status ===  201) {
-                    alert('회원가입이 성공적으로 완료되었습니다.');
-                } else {
-                    alert('중복된 username입니다.');
-                }
+
+            success: function (response) {
+                alert('회원가입이 성공적으로 완료되었습니다.');
                 window.location.href = host + '/api/auth/login-page';
             },
-            error: function (jqXHR, textStatus) {
-                alert('회원가입에 실패하였습니다. 다시 시도해주세요.');
+            error: function (xhr) {
+                if(xhr.status == 400) {
+                    alert('중복된 username 입니다.');
+                }else {
+                    alert('회원가입에 실패하였습니다. 다시 시도해주세요.');
+                }
+
             }
 
         });
@@ -163,14 +162,6 @@
             data: JSON.stringify({username: username, password: password}),
         })
             .done(function (res, status, xhr) {
-                // const token = xhr.getResponseHeader('Authorization');
-                //
-                // Cookies.set('Authorization', token, {path: '/'})
-                //
-                // $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
-                //     jqXHR.setRequestHeader('Authorization', token);
-                // });
-
                 window.location.href = host;
             })
             .fail(function (jqXHR, textStatus) {
@@ -178,7 +169,7 @@
             });
     }
 
-
 </script>
+
 </html>
 

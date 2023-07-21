@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j(topic = "Controller")
 @RestController
 @RequiredArgsConstructor
@@ -17,6 +19,11 @@ import org.springframework.web.bind.annotation.*;
 public class CommentController {
 
     private final CommentService commentService;
+
+    @GetMapping("/comments")
+    public List<CommentResponseDto> getAllComment() {
+        return commentService.getAllComment();
+    }
 
     @PostMapping("/{postid}/comment")
     public ResponseEntity<CommentResponseDto> createComment(@PathVariable Long postid, @RequestBody CommentRequestDto commentRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -27,14 +34,14 @@ public class CommentController {
 
     @PutMapping("/{postid}/comment/{commentid}")
     public ResponseEntity<String> updateComment(@PathVariable Long commentid,
-                                            @RequestBody CommentRequestDto commentRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+                                                @RequestBody CommentRequestDto commentRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         log.info("Controller | commentid: " + commentid + ", username: " + userDetails.getUsername());
         return commentService.updateComment(commentid, commentRequestDto, userDetails.getUser());
     }
 
     @DeleteMapping("/{postid}/comment/{commentid}")
     public ResponseEntity<String> deleteComment(@PathVariable Long postid, @PathVariable Long commentid,
-                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
+                                                @AuthenticationPrincipal UserDetailsImpl userDetails) {
         log.info("Controller | commentid: " + commentid + ", username: " + userDetails.getUsername());
         return commentService.deleteComment(postid, commentid, userDetails.getUser());
     }

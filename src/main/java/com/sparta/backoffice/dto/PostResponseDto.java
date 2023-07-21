@@ -22,7 +22,7 @@ public class PostResponseDto {
     private String content;
     private LocalDateTime createAt;
     private LocalDateTime modifiedAt;
-    private long views;
+    private int views;
     private long likeCount;
     private long commentCount;
     private Boolean anonymous;
@@ -41,7 +41,7 @@ public class PostResponseDto {
             this.anonymous = false;
         }
         this.modifiedAt = post.getModifiedAt();
-        this.views = post.getViews();
+        this.views = (int) post.getViews();
         this.likeCount = post.getLikeCount();
         this.commentCount = post.getCommentCount();
 

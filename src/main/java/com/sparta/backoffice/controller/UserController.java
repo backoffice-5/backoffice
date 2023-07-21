@@ -16,8 +16,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.io.IOException;
 import java.util.List;
@@ -38,11 +43,10 @@ public class UserController {
         return "signup";
     }
 
-    @RequestMapping("/logout")
-    public ResponseEntity<StatusResponseDto> logout(HttpServletResponse response, Authentication authResult) throws ServletException, IOException, IOException, IOException {
-        log.info("로그아웃 할거야");
-        jwtAuthorizationFilter.deleteAuthentication(response, authResult);
-        return ResponseEntity.status(201).body(new StatusResponseDto("로그아웃 성공", HttpStatus.CREATED.value()));
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response,String name){
+        jwtUtil.deleteCookie(request,response,"Authorization");
+        return "redirect:/";
     }
 
     @PostMapping("/api/auth/signup")

@@ -1,11 +1,8 @@
 package com.sparta.backoffice.service;
 
 import com.sparta.backoffice.dto.AuthRequestDto;
-import com.sparta.backoffice.entity.BlackList;
 import com.sparta.backoffice.entity.User;
 import com.sparta.backoffice.entity.UserRoleEnum;
-import com.sparta.backoffice.jwt.JwtUtil;
-import com.sparta.backoffice.repository.BlackListRepository;
 import com.sparta.backoffice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,11 +18,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    private final BlackListRepository blackListRepository;
-
     private final PasswordEncoder passwordEncoder;
-
-    private final JwtUtil jwtUtil;
 
     private static final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
 
@@ -52,27 +45,5 @@ public class UserService {
         }
         User user = new User(username, nickname, role, password);
         userRepository.save(user);
-    }
-
-    public void login(AuthRequestDto requestDto) {
-        String username = requestDto.getUsername();
-        String password = requestDto.getPassword();
-
-        log.info("로그인 : " + requestDto.getUsername());
-        log.info("로그인 : " + requestDto.getPassword());
-
-        User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new IllegalArgumentException("등록된 아이디가 없습니다.")
-        );
-
-        if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-        }
-    }
-
-    public void logout(String token) {
-        // 토큰을 블랙리스트에 추가
-        BlackList blackList = new BlackList(token);
-        blackListRepository.save(blackList);
     }
 }

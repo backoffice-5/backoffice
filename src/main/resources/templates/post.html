@@ -250,8 +250,8 @@
 <body>
 <div class = "top">
     <div class="mybutton">
-        <button id = "loginButton">로그인</button>
-        <button id = "logoutButton">로그아웃</button> <!--onclick="location.href='/api/logout'"-->
+        <button id ="loginButton">로그인</button>
+        <button id="logoutButton" onclick="logout()">로그아웃</button> <!--onclick="location.href='/api/logout'"-->
     </div>
 
     <div class="header">
@@ -343,6 +343,18 @@
 </div>
 </body>
 <script>
+    // 로그아웃
+    function logout() {
+        window.location.href = "/";
+        deleteJwtCookie();
+    }
+
+    function deleteJwtCookie() {
+        const cookieName = 'Authorization'; // JWT가 저장된 쿠키의 이름
+        // 만료일을 예전 날짜로 설정하여 쿠키를 삭제합니다.
+        document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+    }
+
     let url = window.location.href;
     let postid = url.replace("http://localhost:8080/api/post/", "");
 
