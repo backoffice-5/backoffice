@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="https://cdn-icons-png.flaticon.com/128/1534/1534072.png" />
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/128/1534/1534072.png"/>
 
     <!--    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
 
@@ -21,7 +21,7 @@
             font-family: 'IBM Plex Sans KR', sans-serif;
         }
 
-        body, html{
+        body, html {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -60,7 +60,7 @@
             flex-direction: column;
         }
 
-        .header{
+        .header {
             margin-top: 30px;
             min-height: 30px;
             width: 70%;
@@ -68,13 +68,13 @@
             flex-direction: row;
         }
 
-        .title{
+        .title {
             display: flex;
             justify-content: center;
             margin: 0;
         }
 
-        .title2{
+        .title2 {
             display: flex;
             justify-content: right;
             margin: 0;
@@ -97,13 +97,30 @@
             background-color: transparent;
         }
 
-        .image {
+        .profile {
+            margin: 0;
+            padding: 0;
+            width: 15%;
+            height: 25%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .box {
             height: 100%;
             min-height: 75px;
             min-width: 75px;
+            border-radius: 70%;
+            overflow: hidden;
             background-size: cover;
             background-color: transparent;
-            background-image: url("https://cdn-icons-png.flaticon.com/128/3024/3024605.png");
+        }
+
+        .profile-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .date {
@@ -194,7 +211,7 @@
         }
 
         button,
-        .mybuttons button{
+        .mybuttons button {
             font-weight: bold;
             height: 25px;
             color: darkslategrey;
@@ -211,25 +228,25 @@
 
         button:hover {
             cursor: pointer;
-            box-shadow:  4px 4px 4px 0 rgba(255,255,255,.5),
+            box-shadow: 4px 4px 4px 0 rgba(255, 255, 255, .5),
             -4px -4px 6px 0 rgba(116, 125, 136, .5),
-            inset -4px -4px 4px 0 rgba(255,255,255,.2),
+            inset -4px -4px 4px 0 rgba(255, 255, 255, .2),
             inset 4px 4px 4px 0 rgba(0, 0, 0, .4);
 
         }
 
-        .edit-form input{
+        .edit-form input {
             width: 90%;
-            color:#000;
-            display:block;
-            padding:10px 20px;
+            color: #000;
+            display: block;
+            padding: 10px 20px;
             margin: 15px;
-            border-radius:25px;
-            background:transparent;
+            border-radius: 25px;
+            background: transparent;
             border: #fff solid 2px;
         }
 
-        .edit-form div{
+        .edit-form div {
             width: 80%;
             margin-left: 15px;
         }
@@ -238,7 +255,7 @@
             margin-bottom: 15px;
         }
 
-        .mybutton{
+        .mybutton {
             margin: 10px auto;
             display: flex;
             justify-content: right;
@@ -248,14 +265,14 @@
     </style>
 </head>
 <body>
-<div class = "top">
+<div class="top">
     <div class="mybutton">
-        <button id = "loginButton">로그인</button>
-        <button id = "logoutButton">로그아웃</button> <!--onclick="location.href='/api/logout'"-->
+        <button id="loginButton">로그인</button>
+        <button id="logoutButton" onclick="logout()">로그아웃</button> <!--onclick="location.href='/api/logout'"-->
     </div>
 
     <div class="header">
-        <div th:id="${post.id}" ></div>
+        <div th:id="${post.id}"></div>
         <div class="title1" style="flex:0.4;">
             <h2 th:text="${post.title}">Title</h2>
         </div>
@@ -263,38 +280,45 @@
             <h3 th:text="${post.nickname}">닉네임</h3>
         </div>
         <div class="title2" style="flex:0.2;">
-            <div class="image">
+            <!--            <div class="image">-->
+            <div class="profile">
+                <div id="profile" class="box" onclick="my_page()">
+                    <img class="profile-image"
+                         src="https://velog.velcdn.com/images/jee_ji/profile/399924c6-4e04-4ff6-9d95-4a76ffe2663b/image.png">
+                </div>
             </div>
         </div>
     </div>
+</div>
 
-    <div class = "date">
-        <h4 style="flex:1;" th:text="${#temporals.format(post.createAt, 'yyyy-MM-dd HH:mm')}">작성일</h4>
+<div class="date">
+    <h4 style="flex:1;" th:text="${#temporals.format(post.createAt, 'yyyy-MM-dd HH:mm')}">작성일</h4>
 
-        <div style="flex:1; display: flex; align-items:center; justify-content:end">
-            <h4 style="flex:0.5;" th:text="|조회수 ${post.views}|">조회수</h4>
-            <form onsubmit="return false;">
-                <label for="myCheckbox" class="checkbox-label">
-                    <input type="checkbox" id="myCheckbox" class="checkbox-input" onchange="handleCheckboxChange()"> <!--th:checked="${like == 'true'}"-->
-                    <span class="checkbox-image"></span>
-                    <span class="checkbox-text" th:text="${post.likeCount}"></span>  <!--th:text="${post.likeCount}"-->
-                </label>
-            </form>
-        </div>
-    </div>
-
-    <div class="content">
-        <p th:text="${post.content}">content</p>
-    </div>
-
-    <div class="mybuttons">
-        <button th:onclick="|location.href='@{/api/post(id=${post.id})}'|">글 수정</button>
-        <button onclick="location.href='/'">메인</button>
-        <button onclick="onDelete()">글 삭제</button>
+    <div style="flex:1; display: flex; align-items:center; justify-content:end">
+        <h4 style="flex:0.5;" th:text="|조회수 ${post.views}|">조회수</h4>
+        <form onsubmit="return false;">
+            <label for="myCheckbox" class="checkbox-label">
+                <input type="checkbox" id="myCheckbox" class="checkbox-input" onchange="handleCheckboxChange()">
+                <!--th:checked="${like == 'true'}"-->
+                <span class="checkbox-image"></span>
+                <span class="checkbox-text" th:text="${post.likeCount}"></span>  <!--th:text="${post.likeCount}"-->
+            </label>
+        </form>
     </div>
 </div>
 
-<div class = "line">
+<div class="content">
+    <p th:text="${post.content}">content</p>
+</div>
+
+<div class="mybuttons">
+    <button th:onclick="|location.href='@{/api/post(id=${post.id})}'|">글 수정</button>
+    <button onclick="location.href='/'">메인</button>
+    <button onclick="onDelete()">글 삭제</button>
+</div>
+</div>
+
+<div class="line">
 
 </div>
 
@@ -307,18 +331,21 @@
     </div>
 
     <div class="cardarea">
-        <div class="mycards" id="comment-list"  th:each="comment : ${comments}">
+        <div class="mycards" id="comment-list" th:each="comment : ${comments}">
             <div class="card" id="card">
                 <div class="card-body" style="display: flex;">
                     <div card style="width: 90%">
                         <p id="commentName_" th:text="${comment.nickname}">유저이름</p>
                         <p id="commentContent_" th:text="${comment.commentcontents}">댓글내용</p>
-                        <p id="commentDate_" th:text="|댓글 작성일: ${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}|" class="blockquote-footer">date</p>
+                        <p id="commentDate_"
+                           th:text="|댓글 작성일: ${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}|"
+                           class="blockquote-footer">date</p>
                     </div>
                     <div style="width: 10%; display: flex; justify-content: center; align-items: center; float:right;">
                         <form onsubmit="return false;">
                             <label class="comment-checkbox-label">
-                                <input type="checkbox" class="comment-checkbox-input" th:id="${comment.id}" th:checked="${comment.like == 'true'}" > <!-- "${comment.liked}"-->
+                                <input type="checkbox" class="comment-checkbox-input" th:id="${comment.id}"
+                                       th:checked="${comment.like == 'true'}"> <!-- "${comment.liked}"-->
                                 <span class="comment-checkbox-image"></span>
                                 <span class="comment-checkbox-text" th:text="${comment.commentlikeCount}">00</span>
                             </label>
@@ -326,9 +353,9 @@
                     </div>
                 </div>
 
-                <div class="card-button" id = "card-button">
-                    <button class = "button_ud" id="button_ud">수정</button>
-                    <button class = "button_del" th:id="${comment.id}">삭제</button>
+                <div class="card-button" id="card-button">
+                    <button class="button_ud" id="button_ud">수정</button>
+                    <button class="button_del" th:id="${comment.id}">삭제</button>
                 </div>
 
                 <div class="edit-form" style="display: none">
@@ -349,7 +376,7 @@
     var like = [[${like}]]; // 서버에서 전달된 like 값을 가져옵니다.
 
     // 페이지 로딩 후 실행되는 함수
-    window.onload = function() {
+    window.onload = function () {
         var checkbox = document.getElementById('myCheckbox');
         if (like) {
             checkbox.checked = true; // like 값이 true인 경우 체크박스 선택
@@ -390,6 +417,23 @@
         return null; // JWT가 존재하지 않는 경우 null 반환
     }
 
+    function my_page() {
+        window.location.href = "/api/profile"; // mypage
+    }
+
+    // 로그아웃
+    function logout() {
+        window.location.href = "/";
+        deleteJwtCookie();
+    }
+
+    function deleteJwtCookie() {
+        const cookieName = 'Authorization'; // JWT가 저장된 쿠키의 이름
+        // 만료일을 예전 날짜로 설정하여 쿠키를 삭제합니다.
+        document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+    }
+
+
     // 게시글 삭제
     function onDelete() {
         let url = window.location.href;
@@ -400,7 +444,7 @@
             type: "DELETE",
             url: `/api/post/${id}`,
             contentType: "application/json",
-            success: function(response, status, xhr) {
+            success: function (response, status, xhr) {
                 if (xhr.status === 200) {
                     // 요청이 성공한 경우 처리할 로직을 작성합니다.
                     console.log("DELETE 요청이 성공했습니다.");
@@ -412,7 +456,7 @@
                     window.location.href = `http://localhost:8080/api/post/${id}`;
                 }
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 // 요청이 실패한 경우 처리할 로직을 작성합니다.
                 console.log("DELETE 요청이 실패했습니다.");
                 console.log(xhr.responseText);
@@ -431,12 +475,12 @@
         console.log(commentcontents);
 
         $.ajax({
-            type : "POST",
+            type: "POST",
             url: `/api/post/${id}/comment`,
             contentType: "application/json",
             data: JSON.stringify({commentcontents: commentcontents}),
             success: function (response, status, xhr) {
-                if(xhr.status == 200) {
+                if (xhr.status == 200) {
                     alert("댓글 작성 완료");
                 } else {
                     alert("댓글 작성 실패");
@@ -471,7 +515,7 @@
                 type: "DELETE",
                 url: `/api/post/${id}/comment/${commentId}`,
                 contentType: "application/json",
-                success: function(response, status, xhr) {
+                success: function (response, status, xhr) {
                     // 서버 응답이 성공적으로 왔을 때 처리
                     if (xhr.status === 200) {
                         // 서버의 상태 코드가 200(성공)인 경우
@@ -482,7 +526,7 @@
                     }
                     window.location.href = `http://localhost:8080/api/post/${id}`;
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     // 요청이 실패한 경우 처리할 로직을 작성합니다.
                     console.log("DELETE 요청이 실패했습니다.");
                     console.log(xhr.responseText);
@@ -496,7 +540,7 @@
 
     // 수정 페이지 안보이게 하기
     calcenBtns.forEach(button => {
-        button.addEventListener('click', function(event) {
+        button.addEventListener('click', function (event) {
             event.preventDefault(); // 폼의 기본 제출 동작 방지
 
             // 현재 버튼과 관련된 .card 요소 찾기
@@ -529,7 +573,7 @@
 
     // 댓글 수정 부분 보이게 하기
     submitBtns.forEach(button => {
-        button.addEventListener('click', function(event) {
+        button.addEventListener('click', function (event) {
             event.preventDefault(); // 폼의 기본 제출 동작 방지
 
             // 현재 버튼과 관련된 .card 요소 찾기
@@ -582,7 +626,7 @@
                 url: `/api/post/${id}/comment/${commentId}`,
                 contentType: "application/json",
                 data: JSON.stringify({commentcontents: value}),
-                success: function(response, status, xhr) {
+                success: function (response, status, xhr) {
 
                     // 요청이 성공한 경우 처리할 로직을 작성합니다.
                     console.log("PUT 요청이 성공했습니다.");
@@ -596,7 +640,7 @@
                     }
                     window.location.href = `http://localhost:8080/api/post/${id}`;
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     // 요청이 실패한 경우 처리할 로직을 작성합니다.
                     console.log("PUT 요청이 실패했습니다.");
                     console.log(xhr.responseText);
@@ -617,6 +661,7 @@
             onHeartDelete();
         }
     }
+
     function onHeartAdd() {
         let url = window.location.href;
         let id = url.replace("http://localhost:8080/api/post/", "");
@@ -634,7 +679,7 @@
                 } else {
                     // 다른 상태 코드에 따라 처리
                     alert("좋아요 실패");
-                    window.location.href =  `http://localhost:8080/api/post/${id}`
+                    window.location.href = `http://localhost:8080/api/post/${id}`
                 }
             },
             error: function (xhr, status, error) {
@@ -642,7 +687,7 @@
                 console.log("POST 요청이 실패했습니다.");
                 console.log(xhr.responseText);
                 alert("본인의 게시글에는 좋아요를 누를 수 없습니다");
-                window.location.href =  `http://localhost:8080/api/post/${id}`
+                window.location.href = `http://localhost:8080/api/post/${id}`
             }
         });
     }
@@ -655,22 +700,22 @@
         $.ajax({
             type: "PUT",
             url: `/api/post/${id}/like`,
-            success: function(response, status, xhr) {
+            success: function (response, status, xhr) {
                 // 요청이 성공한 경우 처리할 로직을 작성합니다.
                 console.log("DELETE 요청이 성공했습니다.");
-                window.location.href =  `http://localhost:8080/api/post/${id}`;
+                window.location.href = `http://localhost:8080/api/post/${id}`;
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 // 요청이 실패한 경우 처리할 로직을 작성합니다.
                 console.log("DELETE 요청이 실패했습니다.");
                 console.log(xhr.responseText);
-                window.location.href =  `http://localhost:8080/api/post/${id}`;
+                window.location.href = `http://localhost:8080/api/post/${id}`;
             }
         });
     }
 
     const checkboxes = document.querySelectorAll('.comment-checkbox-input');
-    checkboxes.forEach(function(checkbox) {
+    checkboxes.forEach(function (checkbox) {
         checkbox.addEventListener('change', checkboxchange);
     });
 
@@ -698,16 +743,16 @@
         $.ajax({
             type: "PUT",
             url: `/api/post/${postid}/comment/` + commentid + "/like",
-            success: function(response, status, xhr) {
+            success: function (response, status, xhr) {
                 // 요청이 성공한 경우 처리할 로직을 작성합니다.
                 console.log("DELETE 요청이 성공했습니다.");
-                window.location.href =  `http://localhost:8080/api/post/${postid}`;
+                window.location.href = `http://localhost:8080/api/post/${postid}`;
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 // 요청이 실패한 경우 처리할 로직을 작성합니다.
                 console.log("DELETE 요청이 실패했습니다.");
                 console.log(xhr.responseText);
-                window.location.href =  `http://localhost:8080/api/post/${postid}`;
+                window.location.href = `http://localhost:8080/api/post/${postid}`;
             }
         });
     }
