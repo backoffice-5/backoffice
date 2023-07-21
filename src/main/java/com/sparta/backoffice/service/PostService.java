@@ -43,24 +43,20 @@ public class PostService {
 
         // PathVariable로 기준을 정해서 그 기준으로 가져오게끔 했음
         if (method.equals("createAt")) {
-            postResponseDtoList = postRepository.findAllByOrderByCreatedAtDesc().stream().map(PostResponseDto::new).toList();
-//            postList = postRepository.findAllByOrderByCreatedAtDesc();
+            postList = postRepository.findAllByOrderByCreatedAtDesc();
         } else if (method.equals("views")) {
-            postResponseDtoList = postRepository.findAllByOrderByViewsDesc().stream().map(PostResponseDto::new).toList();
-//            postList = postRepository.findAllByOrderByViewsDesc();
+            postList = postRepository.findAllByOrderByViewsDesc();
         } else if (method.equals("likes")) {
-            postResponseDtoList = postRepository.findAllByOrderByLikeCountDesc().stream().map(PostResponseDto::new).toList();
-//            postList = postRepository.findAllByOrderByLikeCountDesc();
+            postList = postRepository.findAllByOrderByLikeCountDesc();
         } else if (method.equals("comment")) {
-            postResponseDtoList = postRepository.findAllByOrderByCommentCountDesc().stream().map(PostResponseDto::new).toList();
-//            postList = postRepository.findAllByOrderByCommentCountDesc();
+            postList = postRepository.findAllByOrderByCommentCountDesc();
         } else {
             throw new IllegalArgumentException("올바른 url이 아닙니다.");
         }
 
-//        for (Post post: postList) {
-//            postResponseDtoList.add(new PostsResponseDto(post));
-//        }
+        for (Post post: postList) {
+            postResponseDtoList.add(new PostResponseDto(post));
+        }
 
         return postResponseDtoList;
     }

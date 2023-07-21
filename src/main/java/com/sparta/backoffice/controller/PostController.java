@@ -10,13 +10,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+
+
 @Slf4j
 @RestController
 @RequestMapping("/api")
 public class PostController {
 
     PostService postService;
-
     public PostController(PostService postService) {
         this.postService = postService;
     }
@@ -26,6 +27,11 @@ public class PostController {
     public PostResponseDto createPost(@RequestBody PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
         return postService.createPost(requestDto, user);
+    }
+
+    @GetMapping("/posts/{method}")
+    public List<PostResponseDto> getAllPost(@PathVariable String method) {
+        return postService.getAllPost(method);
     }
 
     // 게시글 업데이트
@@ -53,5 +59,5 @@ public class PostController {
 //        public List<PostsResponseDto> searchPost (@RequestParam String text){
 //            return postService.searchPost(text);
 //        }
-    }
 
+}

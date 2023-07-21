@@ -36,25 +36,6 @@ public class ViewController {
         return "index";
     }
 
-    @GetMapping("/posts/{method}")
-    public String getAllPost(@PathVariable String method, Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        List<PostResponseDto> postResponseDto = postService.getAllPost(method);
-
-        if (method.equals("createAt")) {
-            model.addAttribute("posts", postResponseDto);
-        } else if (method.equals("views")) {
-            model.addAttribute("posts", postResponseDto);
-        } else if (method.equals("likes")) {
-            model.addAttribute("posts", postResponseDto);
-        } else if (method.equals("comment")) {
-            model.addAttribute("posts", postResponseDto);
-        } else {
-            throw new IllegalArgumentException("올바른 url이 아닙니다.");
-        }
-
-        return "redirect:/";
-    }
-
     @GetMapping("/api/post")
     public String newPost(@RequestParam(required=false) Long id, Model model) {
         if (id == null) { // id가 없으면 설정
