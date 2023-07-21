@@ -16,7 +16,7 @@
     <title>메인 페이지</title>
     <style>
         * {
-            font-family: "Poppins", sans-serif;
+            font-family: 'IBM Plex Sans KR', sans-serif;
         }
 
         html, body {
@@ -26,11 +26,14 @@
             padding: 0;
             overflow: hidden;
             color: #000000;
+            /*cursor: url("https://cdn-icons-png.flaticon.com/128/4713/4713405.png") 16 16,auto;*/
         }
 
         h1 {
             margin: 0;
         }
+
+
 
         a {
             position: relative;
@@ -60,19 +63,86 @@
             margin: 0;
             padding: 0;
             width: 100%;
+            height: 20%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background-color: transparent;
+            /*flex-direction: column;*/
+        }
+
+        .glitch:before,
+        .glitch:after {
+            display: block;
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0.8;
+        }
+
+        .glitch:before {
+            animation: glitch-it 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+            color: #00FFFF;
+            z-index: -1;
+        }
+
+        .glitch:after {
+            animation: glitch-it 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) reverse both infinite;
+            color: #FF00FF;
+            z-index: -2;
+        }
+
+        @keyframes glitch-it {
+            0% {
+                transform: translate(0);
+            }
+            20% {
+                transform: translate(-2px, 2px);
+            }
+            40% {
+                transform: translate(-2px, -2px);
+            }
+            60% {
+                transform: translate(2px, 2px);
+            }
+            80% {
+                transform: translate(2px, -2px);
+            }
+            to {
+                transform: translate(0);
+            }
+        }
+/*------------------------------------------------------------------------헤더&프로필*/
+        .profile {
+            margin: 0;
+            padding: 0;
+            width: 100%;
             height: 25%;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            background-color: transparent;
-            flex-direction: column;
+        }
+
+        .box {
+            width: 100px;
+            height: 100px;
+            border-radius: 70%;
+            overflow: hidden;
+            float: left;
+        }
+        .profile-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .line {
             margin: 0;
             width: 100%;
             height: 0.5%;
-            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background: linear-gradient(-45deg, #ff855e, #e73c7e, #ffd600, #2332d5);
             background-size: 400% 400%;
             opacity: 0.2;
             animation: gradient 15s ease infinite;
@@ -136,77 +206,6 @@
             text-align: center;
         }
 
-        .row {
-            width: 100%;
-        }
-
-        .cards {
-            background-color: transparent;
-            width: 60%;
-            overflow: scroll;
-            overflow-x: hidden;
-            margin-bottom: 10px;
-        }
-
-        .cards::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .cards::-webkit-scrollbar-track {
-            background-color: transparent;
-        }
-
-        .cards::-webkit-scrollbar-thumb {
-            border-radius: 3px;
-            background-color: #A7ECEE;
-        }
-
-        .cards::-webkit-scrollbar-button {
-            width: 0;
-            height: 0;
-        }
-
-        .card {
-            width: 100%;
-            min-height: 10px;
-            height: 85%;
-            border-radius: 20px;
-            backdrop-filter: blur(5px);
-            background: rgba(255, 255, 255, 0.1);
-            /*box-shadow: 0 0px 25px rgba(0, 0, 0, 0.1);*/
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            border-right: 1px solid rgba(255, 255, 255, 0.2);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            overflow: hidden;
-            color: #000
-        }
-
-        .card-body {
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .left-content {
-            flex-grow: 1;
-        }
-
-        .right-content {
-            display: flex;
-            float: right;
-            align-items: center;
-            justify-content: center;
-            margin-left: 10px;
-        }
-
-        .right-content > button {
-            height: 50%;
-        }
-
-        h3 {
-            margin: 0;
-        }
-
         /*---------------------------------------------------메뉴 css 시작*/
         @import url('https://fonts.googleapis.com/css?family=Cutive+Mono');
 
@@ -224,7 +223,8 @@
             font-family: "Cutive Mono", serif;
             font-size: 1.2em;
             line-height: 1.6;
-            background: #CCC;
+            background: rgb(255,236,244);
+            background: radial-gradient(circle, rgba(255,236,244,1) 0%, rgba(236,251,255,1) 100%);
             overflow-x: hidden;
         }
 
@@ -320,6 +320,126 @@
         /*---------------------------------------------------메뉴 css 끝*/
 
 
+        /*---------------------------------------------------탭 css 끝*/
+        @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
+
+        :root {
+            --primary-color: #185ee0;
+            --secondary-color: #e6eef9;
+        }
+
+        *,
+        *:after,
+        *:before {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Inter", sans-serif;
+            background-color: rgba(230, 238, 249, 0.5);
+        }
+
+        .container {
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tabs {
+            display: flex;
+            position: relative;
+            background-color: #fff;
+            box-shadow: 0 0 1px 0 rgba(24, 94, 224, 0.15), 0 6px 12px 0 rgba(24, 94, 224, 0.15);
+            padding: 0.75rem;
+            border-radius: 99px; /* just a high number to create a pill effect */
+        }
+
+        * {
+            z-index: 2;
+        }
+
+        input[type="radio"] {
+            display: none;
+        }
+
+        .tab {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 54px;
+            width: 200px;
+            font-size: 1.25rem;
+            font-weight: 500;
+            border-radius: 99px; /* just a high number to create a pill effect */
+            cursor: pointer;
+            transition: color 0.15s ease-in;
+        }
+
+        .notification {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2rem;
+            height: 2rem;
+            margin-left: 0.75rem;
+            border-radius: 50%;
+            background-color: var(--secondary-color);
+            transition: 0.15s ease-in;
+        }
+
+        input[type="radio"]:checked + label {
+            color: var(--primary-color);
+        }
+
+        input[type="radio"]:checked + label > .notification {
+            background-color: var(--primary-color);
+            color: #fff;
+        }
+
+        input[id="radio-1"]:checked ~ .glider {
+            transform: translateX(0);
+        }
+
+        input[id="radio-2"]:checked ~ .glider {
+            transform: translateX(100%);
+        }
+
+        input[id="radio-3"]:checked ~ .glider {
+            transform: translateX(200%);
+        }
+
+        input[id="radio-4"]:checked ~ .glider {
+            transform: translateX(300%);
+        }
+
+        input[id="radio-5"]:checked ~ .glider {
+            transform: translateX(400%);
+        }
+
+        .glider {
+            position: absolute;
+            display: flex;
+            height: 54px;
+            width: 200px;
+            background-color: var(--secondary-color);
+            z-index: 1;
+            border-radius: 99px; /* just a high number to create a pill effect */
+            transition: 0.25s ease-out;
+        }
+
+        @media (max-width: 700px) {
+            .tabs {
+                transform: scale(0.6);
+            }
+        }
+
+        /*---------------------------------------------------탭 css 시작*/
+
     </style>
 </head>
 
@@ -335,7 +455,6 @@
             <li>
                 <a href="/api/auth/login-page" id="loginButton" >로그인</a>
                 <a id="logoutButton" onclick=logout()>로그아웃</a><br>
-                <a href="/api/admin" id="mypageButton">정보 수정</a><br>
                 <a href="/api/admin" id="adminButton">관리자</a><br>
             </li>
         </ul>
@@ -343,16 +462,60 @@
 <!---------------------------------------------------------메뉴끝--->
 
 <div class="header">
-    <div class="cloud cloud1"></div>
-    <div class="cloud cloud2"></div>
-    <div class="cloud cloud3"></div>
-    <div class="cloud cloud4"></div>
-    <div class="cloud cloud5"></div>
-    <div><h1 class="title1">Back<br> Office</h1></div>
+    <div class="glitch" data-text="Back Office">Back Office</div>
+</div>
+
+<div class="profile">
+    <div id = "profile" class="box" onclick=my_page() style="background: #BDBDBD;">
+        <img class="profile-image" src="https://velog.velcdn.com/images/jee_ji/profile/399924c6-4e04-4ff6-9d95-4a76ffe2663b/image.png">
+    </div>
 </div>
 
 <div class="line"></div>
+<div class ="bottom">
 
+
+<!---------------------------------------------------------탭 html 시작--->
+
+<div class="container">
+    <div class="tabs">
+        <input type="radio" id="radio-1" name="tabs" checked />
+        <label class="tab" for="radio-1">전체</label>
+        <input type="radio" id="radio-2" name="tabs" />
+        <label class="tab" for="radio-2">조회수</label>
+        <input type="radio" id="radio-3" name="tabs" />
+        <label class="tab" for="radio-3">댓글수</label>
+        <input type="radio" id="radio-4" name="tabs" />
+        <label class="tab" for="radio-4">좋아요수</label>
+        <input type="radio" id="radio-5" name="tabs" />
+        <label class="tab" for="radio-5">최신</label>
+        <span class="glider"></span>
+    </div>
+</div>
+<!---------------------------------------------------------탭 html 끝--->
+
+<div class = "cards">
+    <div class="row" th:each="post : ${posts}">
+        <div class="card">
+            <div class="card-header" > <!--th:text="${post.id}"-->
+            </div>
+            <div class="card-body">
+                <div class="left-content">
+                    <h4 class="card-title" th:text="${post.title}">title</h4>
+                    <p class="card-text" th:text="${post.nickname}">username</p>
+                    <!--"'Value 1: ' + ${value1} + ' - Value 2: ' + ${value2}"-->
+                    <p class="card-text" th:text="${#temporals.format(post.createAt, 'yyyy-MM-dd HH:mm')} + ' | 조회수: ' + ${post.views} + '회 | 좋아요 수: ' + ${post.likeCount} + '개'">시간</p>
+                </div>
+                <div class="right-content">
+                    <button th:onclick="|location.href='/api/post/' + ${post.id}|" class="btn-5">보러가기</button>
+                </div>
+            </div>
+        </div>
+        <br>
+
+    </div>
+</div>
+</div>
 </body>
 <script>
     const host = 'http://' + window.location.host;
@@ -360,6 +523,10 @@
     function logout() {
         window.location.href = "/";
         deleteJwtCookie();
+    }
+
+    function my_page() {
+        window.location.href = "/api/auth/login-page"; // mypage
     }
 
     function deleteJwtCookie() {
@@ -372,8 +539,8 @@
     function toggleButtons() {
         const loginButton = document.getElementById('loginButton'); // 로그인 버튼 요소를 가져옴
         const logoutButton = document.getElementById('logoutButton'); // 로그아웃 버튼 요소를 가져옴
-        const mypageButton = document.getElementById('mypageButton'); // 마이페이지 버튼 요소를 가져옴
         const adminButton = document.getElementById('adminButton'); // 관리자페이지 버튼 요소를 가져옴
+        const profile = document.getElementById('profile'); // 관리자페이지 버튼 요소를 가져옴
 
         const jwtToken = getJwtFromCookie(); // Request 헤더에서 JWT 토큰을 가져옴
 
@@ -382,13 +549,13 @@
         if (jwtToken) {
             loginButton.style.display = 'none'; // JWT 토큰이 존재하면 로그인 버튼을 감춤
             logoutButton.style.display = 'inline'; // JWT 토큰이 존재하면 로그아웃 버튼을 표시
-            mypageButton.style.display = 'inline';
             adminButton.style.display = 'inline';
+            profile.style.display = 'inline';
         } else {
             loginButton.style.display = 'inline'; // JWT 토큰이 존재하지 않으면 로그인 버튼을 표시
             logoutButton.style.display = 'none'; // JWT 토큰이 존재하지 않으면 로그아웃 버튼을 감춤
-            mypageButton.style.display = 'none';
             adminButton.style.display = 'none';
+            profile.style.display = 'none';
         }
     }
 
@@ -410,6 +577,7 @@
 
     // 페이지 로드 시 toggleButtons 함수를 호출하여 버튼 초기 상태를 설정
     toggleButtons();
+
 
 </script>
 </html>
