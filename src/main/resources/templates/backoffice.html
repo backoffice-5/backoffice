@@ -124,7 +124,11 @@
                                         <span>유저id: ${username}</span>
                                         <span>유저별명: ${nickname}</span>
                                         <span>댓글 내용: ${commentContent}</span>
-                                        <button>수정</button>
+                                        <button class="updateComment" onclick="showEditDiv(${id})" >수정</button>
+                                        <div id="edit_${id}" style="display:none;">
+                                        <input/>
+                                        <button onclick="editComment(${id},${postId})">확인</button>
+                                        </div>
                                         <button onclick="deleteComment(${id},${postId})">삭제</button>
                                     </div>`;
 
@@ -136,6 +140,44 @@
                 console.error(error);
               });
     }
+    //댓글 수정 버튼 누르면 실행되는 함수
+    function showEditDiv(id) {
+      console.log(id)
+      var editDiv = document.getElementById('edit_' + id);
+        console.log(editDiv)
+      editDiv.style.display = "block"; // "block"으로 설정하면 보이게 됩니다.
+    }
+
+    //댓글 수정 확인을 누르면 실행되는 함수
+    function editComment(commentId, postId) {
+      console.log("commentId", commentId)
+      console.log("postId", postId)
+      const editDiv = document.getElementById('edit_' + commentId);
+      const updatedContent = editDiv.querySelector("input").value;
+      console.log(updatedContent)
+
+      const url = `/api/post/${postId}/comment/${commentId}`;
+      fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ commentcontents: updatedContent }),
+      })
+              .then(response => {
+                if (response.status === 200) {
+                  alert("댓글 수정 완료");
+                  window.location.reload();
+                } else {
+                  alert("댓글 수정 실패!");
+                }
+              })
+              .catch(error => {
+                console.error('댓글 수정 중 오류가 발생했습니다.', error);
+              });
+    }
+
+
 
     // 게시글 삭제
     function deleteComment(commentId, postId) {
@@ -155,6 +197,12 @@
                 console.error('댓글 삭제 중 오류가 발생했습니다.', error);
               });
     }
+
+
+
+
+
+
 
     //회원목록 가져오기
     function getUserData() {
