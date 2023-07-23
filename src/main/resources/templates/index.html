@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"
             integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.1.4/pagination.min.js"></script>
@@ -25,6 +26,7 @@
     <style>
         * {
             font-family: 'IBM Plex Sans KR', sans-serif;
+
         }
 
         html, body {
@@ -68,6 +70,7 @@
             margin: 0;
             padding: 0;
             width: 100%;
+
             height: 20%;
             display: flex;
             align-items: center;
@@ -127,6 +130,7 @@
             to {
                 transform: translate(0);
             }
+
         }
 
         .line {
@@ -613,13 +617,13 @@
         }
 
         .profile {
-            margin: 0;
-            padding: 0;
-            width: 15%;
-            height: 25%;
+            width: 100px;
+            height: 100px;
+            margin-right: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            cursor: pointer;
         }
 
         .box {
@@ -633,6 +637,10 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+        }
+
+        li {
+            cursor: pointer;
         }
     </style>
 </head>
@@ -654,10 +662,13 @@
             <a id="logoutButton" onclick="logout()">로그아웃</a>
         </li>
         <li>
-            <a href="/api/post" id="postButton">게시글 작성</a>
+            <a href="/api/post" id="postBtn">게시글 작성</a>
         </li>
         <li>
-            <a href="/api/admin" id="adminButton">관리자</a>
+            <a href="/api/graph" id="graphButton">게시글 조회수</a>
+        </li>
+        <li>
+            <a href="/api/auth/backoffice" id="adminButton">관리자</a>
         </li>
     </ul>
 
@@ -665,7 +676,7 @@
 <!---------------------------------------------------------메뉴끝--->
 
 <div class="header">
-    <div class="profile">
+    <div class="profile" id="mycheckbox">
         <div id="profile" class="box" onclick="my_page()">
             <img class="profile-image"
                  src="https://velog.velcdn.com/images/jee_ji/profile/399924c6-4e04-4ff6-9d95-4a76ffe2663b/image.png">
@@ -810,8 +821,9 @@
         const logoutButton = document.getElementById('logoutButton'); // 로그아웃 버튼 요소를 가져옴
         const adminButton = document.getElementById('adminButton'); // 관리자페이지 버튼 요소를 가져옴
         const profile = document.getElementById('profile');
-        const postButton = document.getElementById('postButton');
-        const mypagebox = document.getElementById('mypagebox');
+        const postButton = document.getElementById('postBtn');
+        const mycheckbox = document.getElementById('mycheckbox');
+        const graphButton = document.getElementById('graphButton');
 
         const jwtToken = getJwtFromCookie(); // Request 헤더에서 JWT 토큰을 가져옴
 
@@ -823,14 +835,16 @@
             logoutButton.style.display = 'inline'; // JWT 토큰이 존재하면 로그아웃 버튼을 표시
             adminButton.style.display = 'inline';
             profile.style.display = 'inline';
-            mypagebox.style.display = 'inline';
+            mycheckbox.style.display = 'block';
+            graphButton.style.display = 'inline';
         } else {
             loginButton.style.display = 'inline'; // JWT 토큰이 존재하지 않으면 로그인 버튼을 표시
-            postButton.style.postButton = 'none'; // JWT 토큰이 존재하지 않으면 로그인 버튼을 표시
+            postButton.style.display = 'none'; // JWT 토큰이 존재하지 않으면 로그인 버튼을 표시
             logoutButton.style.display = 'none'; // JWT 토큰이 존재하지 않으면 로그아웃 버튼을 감춤
             adminButton.style.display = 'none';
             profile.style.display = 'none';
-            mypagebox.style.display = 'none';
+            mycheckbox.style.display = 'none';
+            graphButton.style.display = 'none';
         }
     }
 
