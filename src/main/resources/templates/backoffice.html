@@ -384,7 +384,7 @@
               .then(function (data) {
                 Swal.fire({
                   icon: 'success',                         // Alert 타입
-                  title: '게시글 삭제 완료!'        // Alert 제목
+                  title: '댓글 삭제 완료!'        // Alert 제목
                 }).then((result) => {
                   if (result.isConfirmed) {
                     window.location.reload();
@@ -469,7 +469,7 @@
     <button id="main" onclick="location.href='/'">메인으로</button>
     <button id="toggle-button1">게시글 수정,삭제</button>
     <button id="toggle-button2">댓글 수정,삭제</button>
-    <button id="toggle-button3">회원정보 수정,삭제</button>
+    <button id="toggle-button3">회원정보 변경</button>
   </div>
   <div id="content1" class="toggle-content">
   <!--  게시글 수정,삭제를 위한 토글-->
