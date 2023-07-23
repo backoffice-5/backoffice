@@ -20,9 +20,14 @@ public class CommentController {
 
     private final CommentService commentService;
 
+//    @GetMapping("/comments")
+//    public List<CommentResponseDto> getAllComment() {
+//        return commentService.getAllComment();
+//    }
+
     @GetMapping("/comments")
-    public List<CommentResponseDto> getAllComment() {
-        return commentService.getAllComment();
+    public List<CommentResponseDto> getAllComment(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return commentService.getAllComment(userDetails.getUser());
     }
 
     @PostMapping("/{postid}/comment")
