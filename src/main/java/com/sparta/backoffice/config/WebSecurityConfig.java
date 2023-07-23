@@ -35,6 +35,12 @@ public class WebSecurityConfig {
         return configuration.getAuthenticationManager();
     }
 
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
+        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil);
+        filter.setAuthenticationManager(authenticationManager(authenticationConfiguration));
+        return filter;
+    }
 
     @Bean
     public JwtAuthorizationFilter jwtAuthorizationFilter() {
@@ -57,7 +63,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/auth/login-page").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/post/**").permitAll()
-
+                        .requestMatchers(HttpMethod.GET, "/api/get-data").permitAll()
                         .requestMatchers("/").permitAll()
                         .anyRequest().authenticated() // 그 외 모든 요청 인증처리
         );
