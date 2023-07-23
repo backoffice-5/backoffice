@@ -20,6 +20,17 @@ public class ProfileController {
 
     private final ProfileService profileService;
 
+    @PutMapping("/profile/update/{id}")
+    public ProfileResponseDto profileUpdateAdmin(@PathVariable Long id,
+                                                 @RequestBody ProfileRequestDto profileRequestDto,
+                                                 @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+
+        // path에서 id 가져와서, 해당 id를 가진 user를 찾아서 변경해라.
+        return profileService.updateProfileAdmin(id, profileRequestDto, userDetails.getUser());
+
+    }
+
 
     //프로필 정보 가져오기
 //    @GetMapping("/profile")
