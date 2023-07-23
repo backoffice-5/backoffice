@@ -90,7 +90,6 @@
 - 추현중: 프로필 관리, 비밀번호 수정
 
 ## 📜 API 명세서
-상세 링크: https://documenter.getpostman.com/view/27928373/2s93zB5246
 
 회원 관련 API
 
