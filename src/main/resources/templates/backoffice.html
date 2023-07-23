@@ -3,36 +3,154 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/128/1534/1534072.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <style>
+
+  <title>Backoffice</title>
+    <style>
+    * {
+      font-family: 'IBM Plex Sans KR', sans-serif;
+
+    }
+
+    body, html{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      overflow-x: hidden;
+      flex-direction: column;
+      background: rgb(255, 236, 244);
+      background: radial-gradient(circle, rgba(255, 236, 244, 1) 0%, rgba(236, 251, 255, 1) 100%);
+    }
+
+    button {
+      margin-right: 10px;
+      font-weight: bold;
+      height: 30px;
+      color: darkslategrey;
+      border-radius: 5px;
+      background: #FFCACA;
+      background: linear-gradient(0deg, #FFCACA 0%, #FFB1B1 100%);
+      border: none;
+    }
+
+    button:before {
+      height: 0%;
+      width: 2px;
+    }
+
+    button:hover {
+      cursor: pointer;
+      box-shadow: 4px 4px 4px 0 rgba(255, 255, 255, .5),
+      -4px -4px 6px 0 rgba(116, 125, 136, .5),
+      inset -4px -4px 4px 0 rgba(255, 255, 255, .2),
+      inset 4px 4px 4px 0 rgba(0, 0, 0, .4);
+
+    }
+
+    .mybuttons{
+      height: 40px;
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .mybuttons button {
+      height: 25px;
+    }
+
     .toggle-content {
       display: none; /* 초기에 숨김 */
       text-align: center; /* 수평 중앙 */
-
       width: 80%;
       height: 80%;
       position: fixed;
       top: 50%;
       left: 50%;
+      padding: 10px;
       transform: translate(-50%, -50%);
-
       overflow-y: auto; /* 내용이 넘칠 경우 수직 스크롤이 추가됩니다. */
-
-      border-radius: 10px;
+      overflow-x: hidden;
       box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.17);
+    }
+
+    #content1 span,
+    #content2 span:nth-child(1),
+    #content2 span:nth-child(2),
+    #content2 span:nth-child(3),
+    #content3 span:nth-child(1),
+    #content3 span:nth-child(2),
+    #content3 span:nth-child(4) {
+      height: 100%;
+      display: flex; /* flexbox를 사용합니다 */
+      align-items: center; /* 세로 방향으로 가운데 정렬합니다 */
+      justify-content: center; /* 가로 방향으로 가운데 정렬합니다 */
+      width: 15%;
+      text-align: center;
+      line-height: 100%;
+    }
+
+    #content3 span:nth-child(3) {
+      height: 100%;
+      display: flex; /* flexbox를 사용합니다 */
+      align-items: center; /* 세로 방향으로 가운데 정렬합니다 */
+      justify-content: center; /* 가로 방향으로 가운데 정렬합니다 */
+      width: 25%;
+      text-align: center;
+      line-height: 100%;
+    }
+
+    #content2 span:nth-child(4) {
+      height: 100%;
+      display: flex; /* flexbox를 사용합니다 */
+      align-items: center; /* 세로 방향으로 가운데 정렬합니다 */
+      justify-content: center; /* 가로 방향으로 가운데 정렬합니다 */
+      width: 40%;
+      text-align: center;
+      line-height: 100%;
+    }
+
+    .posts, .comments, .userss {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      background:rgba(255,255,255,.3);
+      height: 7%;
+      margin: 5px 0px;
+      border-radius: 10px;
+      border: 1px solid #fff;
+      width: 100%;
+    }
+
+    .editing {
+      width: 30%;
+      display: flex;
+      flex-direction: row;
+    }
+
+    input {
+      border:2px solid rgba(255,255,255,.7);
+      padding:5px;
+      border-radius:25px;
+      background:rgba(255,255,255,.5);
+      color: #000;					//입력창 글씨색
     }
   </style>
 
   <script>
-    window.onload = function() {
-      getPostData();
-      getCommentData();
-      getUserData()
-    }
-
     // 게시글 목록 가져오기
     function getPostData() {
+
       fetch('/api/posts/createAt', {
         method: 'GET',
         headers: {
@@ -46,17 +164,18 @@
 
                   let id = data[i].id;
                   let title = data[i].title;
-                  let nickname = data[i].nickname;
+                  let nicknames = data[i].nickname;
+                  let username = data[i].username;
                   let commentCount = data[i].commentCount;
                   let likeCount = data[i].likeCount;
                   let views = data[i].views;
 
-                  let temp_html = `<div id="post ${id}">
-                                        <span>닉네임: ${nickname}</span>
+                  let temp_html = `<div id="post ${id}" class="posts">
+                                        <span>아이디: ${username}</span>
                                         <span>제목: ${title}</span>
-                                        <span>댓글수: ${commentCount}</span>
-                                        <span>좋아요수: ${likeCount}</span>
-                                        <span>조회수: ${views}</span>
+                                        <span>댓글 수: ${commentCount}</span>
+                                        <span>좋아요 수: ${likeCount}</span>
+                                        <span>조회 수: ${views}</span>
                                         <button onclick="updatePost(${id})">수정</button>
                                         <button onclick="deletePost(${id})">삭제</button>
                                    </div>
@@ -90,8 +209,14 @@
         }
       })
       .then(function (data) {
-        alert("삭제 완료");
-        window.location.reload();
+        Swal.fire({
+          icon: 'success',                         // Alert 타입
+          title: '게시글 삭제 완료!'        // Alert 제목
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
+        });
       })
       .catch(error => {
         // 에러 처리
@@ -119,17 +244,18 @@
                   let nickname = data[i].nickname;
                   let commentContent = data[i].commentcontents;
 
-                  let temp_html = `<div>
+                  let temp_html = `<div class="comments">
                                         <span>글 제목: ${postTitle}</span>
-                                        <span>유저id: ${username}</span>
-                                        <span>유저별명: ${nickname}</span>
-                                        <span>댓글 내용: ${commentContent}</span>
-                                        <button class="updateComment" onclick="showEditDiv(${id})" >수정</button>
-                                        <div id="edit_${id}" style="display:none;">
-                                        <input/>
-                                        <button onclick="editComment(${id},${postId})">확인</button>
+                                        <span>아이디: ${username}</span>
+                                        <span>닉네임: ${nickname}</span>
+                                        <span id = "commentcontent_${id}">댓글 내용: ${commentContent}</span>
+                                        <button id="updatebtn_${id}" class="updateComment" onclick="showEditDiv(${id})" >수정</button>
+                                        <div id="edit_${id}" class="editing" style="display:none;">
+                                            <input placeholder="${commentContent}"/>
+                                            <button onclick="editComment(${id},${postId})">확인</button>
+                                            <button onclick="editCancel(${id})">취소</button>
                                         </div>
-                                        <button onclick="deleteComment(${id},${postId})">삭제</button>
+                                        <button id="deletebtn_${id}" onclick="deleteComment(${id},${postId})">삭제</button>
                                     </div>`;
 
                   $('#content2').append(temp_html);
@@ -179,6 +305,73 @@
 
 
 
+    let originalCommentContent = '';
+
+    //댓글 수정 버튼 누르면 실행되는 함수
+    function showEditDiv(id) {
+      console.log(id)
+      var editDiv = document.getElementById('edit_' + id);
+      var updateDiv = document.getElementById('updatebtn_' + id);
+      var deleteDiv = document.getElementById('deletebtn_' + id);
+      console.log(editDiv)
+      editDiv.style.display = "block"; // "block"으로 설정하면 보이게 됩니다.
+      updateDiv.style.display = "none";
+      deleteDiv.style.display = "none";
+    }
+
+    function editCancel(id) {
+      var editDiv = document.getElementById('edit_' + id);
+      var updateDiv = document.getElementById('updatebtn_' + id);
+      var deleteDiv = document.getElementById('deletebtn_' + id);
+
+      editDiv.style.display = "none"; // "block"으로 설정하면 보이게 됩니다.
+      updateDiv.style.display = "inline";
+      deleteDiv.style.display = "inline";
+    }
+
+    //댓글 수정 확인을 누르면 실행되는 함수
+    function editComment(commentId, postId) {
+      console.log("commentId", commentId)
+      console.log("postId", postId)
+      const editDiv = document.getElementById('edit_' + commentId);
+      const updatedContent = editDiv.querySelector("input").value;
+      console.log(updatedContent)
+
+      const url = `/api/post/${postId}/comment/${commentId}`;
+      fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ commentcontents: updatedContent }),
+      })
+              .then(response => {
+                if (response.status === 200) {
+                  Swal.fire({
+                    icon: 'success',                         // Alert 타입
+                    title: '댓글 수정 완료!'        // Alert 제목
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      window.location.reload();
+                    }
+                  });
+
+                } else {
+                  Swal.fire({
+                    icon: 'error',                         // Alert 타입
+                    title: '댓글 수정 실패 !'        // Alert 제목
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      return;
+                    }
+                  });
+                }
+              })
+              .catch(error => {
+                console.error('댓글 수정 중 오류가 발생했습니다.', error);
+              });
+    }
+
     // 게시글 삭제
     function deleteComment(commentId, postId) {
       let url = '/api/post/' + postId + '/comment/' + commentId;
@@ -189,8 +382,14 @@
         }
       })
               .then(function (data) {
-                alert("삭제 완료");
-                window.location.reload();
+                Swal.fire({
+                  icon: 'success',                         // Alert 타입
+                  title: '게시글 삭제 완료!'        // Alert 제목
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    window.location.reload();
+                  }
+                });
               })
               .catch(error => {
                 // 에러 처리
@@ -222,13 +421,13 @@
                   let nickname = data[i].nickname;
                   let role = data[i].role;
 
-                  let temp_html = `<div>
-                                        <span>유저 pk: ${id}</span>
-                                        <span>유저 id: ${username}</span>
+                  let temp_html = `<div class="userss">
+                                        <span>순서: ${id}</span>
+                                        <span>유저 아이디: ${username}</span>
                                         <span>유저 닉네임: ${nickname}</span>
                                         <span>유저 권한: ${role}</span>
                                         <button onclick="userToAdmin('${username}')">권한 변경</button>
-                                        <button>프로필 변경</button>
+                                        <button onclick="location.href='/api/edit_profile/${id}'">프로필 변경</button>
                                     </div>`;
 
                   $('#content3').append(temp_html);
@@ -247,43 +446,59 @@
       fetch(url, {
         method: 'PUT',
       })
-              .then(function (data) {
-                alert("권한변경 완료");
-                window.location.reload();
-              })
-              .catch(error => {
-                console.error('PUT 요청 실패:', error);
-              });
+        .then(function (data) {
+          Swal.fire({
+            icon: 'success',                         // Alert 타입
+            title: '권한변경 완료!'        // Alert 제목
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.location.reload();
+            }
+          });
+        })
+        .catch(error => {
+          console.error('PUT 요청 실패:', error);
+        });
     }
 
 
   </script>
 </head>
 <body>
-<button id="toggle-button1">게시글 수정,삭제</button>
-<button id="toggle-button2">댓글 수정,삭제</button>
-<button id="toggle-button3">회원정보 수정,삭제</button>
+  <div class="mybuttons">
+    <button id="main" onclick="location.href='/'">메인으로</button>
+    <button id="toggle-button1">게시글 수정,삭제</button>
+    <button id="toggle-button2">댓글 수정,삭제</button>
+    <button id="toggle-button3">회원정보 수정,삭제</button>
+  </div>
+  <div id="content1" class="toggle-content">
+  <!--  게시글 수정,삭제를 위한 토글-->
 
-<div id="content1" class="toggle-content">
-<!--  게시글 수정,삭제를 위한 토글-->
+  </div>
 
-</div>
+  <div id="content2" class="toggle-content">
+  <!--  댓글 수정,삭제를 위한 토글-->
+  </div>
 
-<div id="content2" class="toggle-content">
-<!--  댓글 수정,삭제를 위한 토글-->
-</div>
-
-<div id="content3" class="toggle-content">
-<!--  회원정보 수정,삭제를 위한 토글-->
-</div>
-
-<script>
-</script>
-
+  <div id="content3" class="toggle-content">
+  <!--  회원정보 수정,삭제를 위한 토글-->
+  </div>
 <script>
   const toggleButton1 = document.getElementById("toggle-button1");
   const toggleButton2 = document.getElementById("toggle-button2");
   const toggleButton3 = document.getElementById("toggle-button3");
+
+  var role = [[${role}]]; // 서버에서 전달된 like 값을 가져옵니다.
+  window.onload = function () {
+    if (role) {
+      toggleButton3.style.display = 'block';
+    } else {
+      toggleButton3.style.display = 'none';
+    }
+    getPostData();
+    getCommentData();
+    getUserData();
+  }
 
   const content1 = document.getElementById("content1");
   const content2 = document.getElementById("content2");

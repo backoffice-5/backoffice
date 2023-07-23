@@ -1,3 +1,8 @@
+* {
+    font-family: 'IBM Plex Sans KR', sans-serif;
+
+}
+
 body{
     margin:0;
     color:#6a6f8c;
@@ -12,13 +17,63 @@ a{color:inherit;text-decoration:none}
 .login-wrap{			/*박스부분*/
     width:100%;
     height: 100%;
-    margin: 50px auto 0px;
+    margin: 40px auto 0px;
     max-width:525px;
     min-height:670px;
     position:relative;
     background: pink;
     box-shadow:0 12px 15px 0 rgba(0,0,0,.24),0 17px 50px 0 rgba(0,0,0,.19);
 }
+
+.password-toggle {
+    position: absolute;
+    top: 29%;
+    right: 20px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    width: 25px;
+    height: 25px;
+    background-image: url('https://cdn-icons-png.flaticon.com/128/58/58976.png');
+    background-size: cover;
+}
+
+.password-toggle2 {
+    position: absolute;
+    top: 29%;
+    right: 20px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    width: 25px;
+    height: 25px;
+    background-image: url('https://cdn-icons-png.flaticon.com/128/58/58976.png');
+    background-size: cover;
+}
+
+.password-visible,
+.password-visible2 {
+    background-image: url('https://cdn-icons-png.flaticon.com/128/9726/9726597.png');
+}
+
+.login-html::-webkit-scrollbar {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 10px;
+}
+
+.login-html::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+.login-html::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    background-color: #FFCACA;
+}
+
+.login-html::-webkit-scrollbar-button {
+    width: 0;
+    height: 0;
+}
+
 .login-html{
     width:100%;
     height:100%;
@@ -60,7 +115,7 @@ a{color:inherit;text-decoration:none}
 .login-html .sign-in:checked + .tab,
 .login-html .sign-up:checked + .tab{
     color:#9AC5F4;				//로그인 글씨컬러
-border-color:#FFB1B1;
+    border-color:#FFB1B1;
 }
 .login-form{
     min-height:450px;
@@ -71,16 +126,21 @@ border-color:#FFB1B1;
 .login-form .group{
     margin-bottom:15px;
 }
+
+input {
+    border: 1px solid #fff;
+}
 .login-form .group .label,
+#admin-token,
 .login-form .group .input,
 .login-form .group .button{
     width:100%;
     color:#fff;				//스크롤바
-display:block;
+    display:block;
 }
 .login-form .group .input,
+#admin-token,
 .login-form .group .button{
-    border:none;
     padding:15px 20px;
     border-radius:25px;
     background:rgba(255,255,255,.1);
@@ -88,7 +148,6 @@ display:block;
 }
 
 .login-form .group input[data-type="password"]{
-
     -webkit-text-security: circle;
 }
 
@@ -104,9 +163,10 @@ display:block;
 .login-form .group > button{
     width:100%;
     color:#ffffff;			//버튼 글 색
-display:block;
+    display:block;
     background-color:pink;    //로그인 버튼 색
-font-size:13px;
+    font-size:18px;
+    font-weight: bold;
     border:none;
     padding:15px 20px;
     border-radius:25px;
@@ -169,4 +229,8 @@ font-size:13px;
 }
 input[type="text"] {
     color: black;  /* 글씨 색상 */
+}
+
+button {
+    cursor: pointer;
 }

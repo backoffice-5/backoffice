@@ -4,13 +4,17 @@ import com.sparta.backoffice.dto.CommentResponseDto;
 import com.sparta.backoffice.dto.PostResponseDto;
 import com.sparta.backoffice.dto.PostsResponseDto;
 import com.sparta.backoffice.entity.Post;
+import com.sparta.backoffice.entity.UserRoleEnum;
+import com.sparta.backoffice.repository.CommentRepository;
 import com.sparta.backoffice.repository.PostRepository;
 import com.sparta.backoffice.security.UserDetailsImpl;
 import com.sparta.backoffice.service.CommentLikeService;
+import com.sparta.backoffice.service.CommentService;
 import com.sparta.backoffice.service.PostLikeService;
 import com.sparta.backoffice.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cglib.core.Local;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +28,7 @@ import java.util.List;
 public class ViewController {
 
     private final PostService postService;
+    private final CommentRepository commentRepository;
     private final CommentLikeService commentLikeService;
     private final PostLikeService postlikeService;
     private final PostRepository postRepository;
@@ -34,6 +39,49 @@ public class ViewController {
         List<PostResponseDto> postResponseDtoList = postRepository.findAll().stream().map(PostResponseDto::new).toList();
         model.addAttribute("posts", postResponseDtoList);
         return "index";
+    }
+
+    @GetMapping("/api/graph")
+    public String getGraph() {
+        return "graph";
+    }
+
+    @GetMapping("/api/getChartData")
+    @ResponseBody
+    public List<PostResponseDto> graph(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        List<PostResponseDto> postResponseDtoList = null;
+        if (userDetails.getUser().getRole().equals(UserRoleEnum.ADMIN)) {
+            postResponseDtoList = postRepository.findAll().stream().map(PostResponseDto::new).toList();
+        } else {
+            postResponseDtoList = postRepository.findAllByUser(userDetails.getUser()).stream().map(PostResponseDto::new).toList();
+        }
+        return postResponseDtoList;
+    }
+
+    @GetMapping("/api/getChartDataComment")
+    @ResponseBody
+    public List<CommentResponseDto> graphComment(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        List<CommentResponseDto> commentResponseDtoList = null;
+        if (userDetails.getUser().getRole().equals(UserRoleEnum.ADMIN)) {
+            commentResponseDtoList = commentRepository.findAll().stream().map(CommentResponseDto::new).toList();
+        } else {
+            commentResponseDtoList = commentRepository.findAllByUser(userDetails.getUser()).stream().map(CommentResponseDto::new).toList();
+        }
+        return commentResponseDtoList;
+    }
+
+    @GetMapping("/api/get-data")
+    @ResponseBody
+    public List<PostResponseDto> getData(@RequestParam("option") String option) {
+        // option에 따라서 서버에서 데이터를 가져와서 model에 담아준다.
+        // 여기서는 예시로 하드코딩한 데이터를 사용하였습니다.
+        List<PostResponseDto> postResponseDtoList = postRepository.findAll().stream().map(PostResponseDto::new).toList();
+
+        if (!option.equals("all")) {
+            postResponseDtoList = postService.getPosts(option);
+        }
+
+        return postResponseDtoList;
     }
 
     @GetMapping("/api/post")
@@ -70,8 +118,5 @@ public class ViewController {
         // post.html 뷰 조회
         return "post";
     }
-
-
-
 
 }

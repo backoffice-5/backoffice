@@ -8,9 +8,13 @@
             integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.1.4/pagination.min.js"></script>
 
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/128/1534/1534072.png" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
     <style>
         * {
@@ -93,7 +97,7 @@
 
         .logoutbtn{
             width: 66%;
-            height: 15%;
+            height: 5%;
             margin: 10px auto 0;
             align-items: center;
             display: flex;
@@ -102,6 +106,9 @@
             justify-content: flex-end;
         }
 
+        #logoutbtn {
+            margin-top: 10px;
+        }
         .row{
             align-items: center;
             justify-self: center;
@@ -229,17 +236,37 @@
 
                     // 서버 응답이 성공적으로 왔을 때 처리
                     if (xhr.status === 200) {
-                        alert("게시글 수정 완료");
+                        Swal.fire({
+                            icon: 'success',                         // Alert 타입
+                            title: '게시글 수정 완료!'        // Alert 제목
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = `http://localhost:8080/api/post/${id}`;
+                            }
+                        });
                     } else {
-                        alert("게시글 수정 실패");
-                    } window.location.href = `http://localhost:8080/api/post/${id}`;
+                        Swal.fire({
+                            icon: 'error',                         // Alert 타입
+                            title: '게시글 수정 실패'        // Alert 제목
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = `http://localhost:8080/api/post/${id}`;
+                            }
+                        });
+                    }
                 },
                 error: function(xhr, status, error) {
                     // 요청이 실패한 경우 처리할 로직을 작성합니다.
                     console.log("POST 요청이 실패했습니다.");
                     console.log(xhr.responseText);
-                    alert("작성자만 수정 가능합니다.")
-                    window.location.href = `http://localhost:8080/api/post/${id}`;
+                    Swal.fire({
+                        icon: 'error',                         // Alert 타입
+                        title: '작성자만 수정 가능합니다'        // Alert 제목
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = `http://localhost:8080/api/post/${id}`;
+                        }
+                    });
                 }
             });
         }
@@ -268,16 +295,37 @@
 
                     // 서버 응답이 성공적으로 왔을 때 처리
                     if (xhr.status === 200) {
-                        alert("게시글 작성 완료");
+                        Swal.fire({
+                            icon: 'success',                         // Alert 타입
+                            title: '게시글 작성 완료!'        // Alert 제목
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = "http://localhost:8080";
+                            }
+                        });
                     } else {
-                        alert("게시글 작성 실패");
-                    } window.location.href = "http://localhost:8080";
+                        Swal.fire({
+                            icon: 'error',                         // Alert 타입
+                            title: '게시글 작성 실패'        // Alert 제목
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = "http://localhost:8080";
+                            }
+                        });
+                    }
                 },
                 error: function(xhr, status, error) {
                     // 요청이 실패한 경우 처리할 로직을 작성합니다.
                     console.log("POST 요청이 실패했습니다.");
                     console.log(xhr.responseText);
-                    alert("게시글 작성 실패");
+                    Swal.fire({
+                        icon: 'error',                         // Alert 타입
+                        title: '게시글 작성 실패'        // Alert 제목
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = "http://localhost:8080";
+                        }
+                    });
                 }
             });
         }
@@ -288,7 +336,7 @@
 <body>
 <div class="header">
     게시글
-<!--    <h1 class="title1"> 게시글 </h1>-->
+    <!--    <h1 class="title1"> 게시글 </h1>-->
 </div>
 <div class = "line"> </div>
 <div class="bottom">

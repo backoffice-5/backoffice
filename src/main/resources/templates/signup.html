@@ -7,14 +7,21 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link rel="stylesheet" type="text/css" href="/css/style.css">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/128/1534/1534072.png" />
+
     <title>회원가입 페이지</title>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"
             integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.1.4/pagination.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.1.4/pagination.css"/>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
 </head>
 <body>
 <div class="login-wrap">
@@ -30,10 +37,12 @@
                 <div class="group">
                     <label for="loginpassword" class="label">Password</label>
                     <input id="loginpassword" type="password" class="input" data-type="password">
+                    <span id="toggle-password" class="password-toggle"
+                          onclick="togglePasswordVisibility()"></span>
                 </div>
 
                 <div class="group">
-                    <button id="login-submit" onclick="login()">login</button>
+                    <button id="login-submit" onclick="login()">로그인</button>
                 </div>
                 <div class="hr"></div>
 
@@ -46,6 +55,8 @@
                 <div class="group">
                     <label for="signuppassword" class="label">Password</label>
                     <input id="signuppassword" type="password" name="password" class="input" data-type="password">
+                    <span id="toggle-password2" class="password-toggle2"
+                          onclick="togglePasswordVisibility2()"></span>
                 </div>
                 <div class="group">
                     <label for="signupnickname" class="label">Nickname</label>
@@ -59,10 +70,9 @@
                            class="login-input-box" style="display:none; width:380px; height:45px; border-radius:20px;">
                 </div>
                 <div class="group">
-                    <button id="login-id-submit" onclick="signup()">Sign Up</button>
+                    <button id="login-id-submit" onclick="signup()">회원가입</button>
                 </div>
 
-                <div class="hr"></div>
                 <div class="foot-lnk">
                     <label for="tab-1">이미 회원이신가요?</label>
                 </div>
@@ -89,6 +99,37 @@
 
         return null; // JWT가 존재하지 않는 경우 null 반환
     }
+
+    function togglePasswordVisibility() {
+        var passwordInput = document.getElementById("loginpassword");
+        var passwordToggle = document.getElementById("toggle-password");
+
+        if (passwordInput.getAttribute("data-type") === "password") {
+            passwordInput.setAttribute("type", "text");
+            passwordInput.setAttribute("data-type", "text");
+            passwordToggle.classList.add("password-visible2");
+        } else {
+            passwordInput.setAttribute("type", "password");
+            passwordInput.setAttribute("data-type", "password");
+            passwordToggle.classList.remove("password-visible2");
+        }
+    }
+
+    function togglePasswordVisibility2() {
+        var passwordInput = document.getElementById("signuppassword");
+        var passwordToggle = document.getElementById("toggle-password2");
+
+        if (passwordInput.getAttribute("data-type") === "password") {
+            passwordInput.setAttribute("type", "text");
+            passwordInput.setAttribute("data-type", "text");
+            passwordToggle.classList.add("password-visible");
+        } else {
+            passwordInput.setAttribute("type", "password");
+            passwordInput.setAttribute("data-type", "password");
+            passwordToggle.classList.remove("password-visible");
+        }
+    }
+
     function toggleAdminSection() {
 
         var checkBox = document.getElementById("admin-check");
@@ -111,7 +152,14 @@
         console.log(username, password, nickname, adminToken, isAdmin);
 
         if (username === '' || password === '' || nickname === '') {
-            alert('회원가입 정보를 모두 입력해주세요.');
+            Swal.fire({
+                icon: 'error',                         // Alert 타입
+                title: '회원가입 정보를 모두 입력해주세요.'        // Alert 제목
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    return;
+                }
+            });
             return;
         }
 
@@ -128,14 +176,34 @@
             contentType: 'application/json',
 
             success: function (response) {
-                alert('회원가입이 성공적으로 완료되었습니다.');
-                window.location.href = host + '/api/auth/login-page';
+                Swal.fire({
+                    icon: 'success',                         // Alert 타입
+                    title: '회원가입이 성공적으로 완료되었습니다.'        // Alert 제목
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = host + '/api/auth/login-page';
+                    }
+                });
             },
             error: function (xhr) {
                 if(xhr.status == 400) {
-                    alert('중복된 username 입니다.');
-                }else {
-                    alert('회원가입에 실패하였습니다. 다시 시도해주세요.');
+                    Swal.fire({
+                        icon: 'error',                         // Alert 타입
+                        title: '중복된 username 입니다.'        // Alert 제목
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            return;
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',                         // Alert 타입
+                        title: '회원가입에 실패하였습니다. 다시 시도해주세요.'        // Alert 제목
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            return;
+                        }
+                    });
                 }
 
             }
@@ -151,7 +219,14 @@
         console.log(username, password);
 
         if (username === '' || password === '') {
-            alert('정보를 모두 입력해주세요.');
+            Swal.fire({
+                icon: 'error',                         // Alert 타입
+                title: '정보를 모두 입력해주세요.'        // Alert 제목
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    return;
+                }
+            });
             return;
         }
 
@@ -165,7 +240,14 @@
                 window.location.href = host;
             })
             .fail(function (jqXHR, textStatus) {
-                alert("로그인 실패")
+                Swal.fire({
+                    icon: 'error',                         // Alert 타입
+                    title: '로그인 실패'        // Alert 제목
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        return;
+                    }
+                });
             });
     }
 

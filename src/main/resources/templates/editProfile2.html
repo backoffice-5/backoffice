@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/128/1534/1534072.png" />
+
+  <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+  <title>프로필 수정</title>
+
+  <style>
+
+    * {
+      font-family: 'IBM Plex Sans KR', sans-serif;
+
+    }
+
+    body, html {
+      overflow: hidden;
+      width: 100%;
+      height: 100%;
+      background: rgb(255, 236, 244);
+      background: radial-gradient(circle, rgba(255, 236, 244, 1) 0%, rgba(236, 251, 255, 1) 100%);
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 20%;
+      flex-direction: column;
+    }
+
+    .bottom {
+      font-size: 20px;
+      font-weight: bold;
+      height: 80%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #profileForm{
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .mybuttons {
+      margin-top: 50px;
+      text-align: center;
+    }
+
+    p, input {
+      width: 200px;
+    }
+
+    span {
+      display: block;
+      width: 200px;
+      border:1px solid #fff;
+      padding:15px 20px;
+      border-radius:25px;
+      background:rgba(255,255,255,.1);
+      color: #000;					//입력창 글씨
+    }
+
+    input {
+      border:2px solid #fff;
+      padding:15px 20px;
+      border-radius:25px;
+      background:rgba(255,255,255,.5);
+      color: #000;					//입력창 글씨색
+    }
+
+    button {
+      margin: 10px;
+      font-weight: bold;
+      width: 90px;
+      height: 25px;
+      color: darkslategrey;
+      border-radius: 5px;
+      background: #FFCACA;
+      background: linear-gradient(0deg, #FFCACA 0%, #FFB1B1 100%);
+      border: none;
+    }
+
+    button:before {
+      height: 0%;
+      width: 2px;
+    }
+
+    button:hover {
+      cursor: pointer;
+      box-shadow: 4px 4px 4px 0 rgba(255, 255, 255, .5),
+      -4px -4px 6px 0 rgba(116, 125, 136, .5),
+      inset -4px -4px 4px 0 rgba(255, 255, 255, .2),
+      inset 4px 4px 4px 0 rgba(0, 0, 0, .4);
+    }
+
+  </style>
+</head>
+
+<body>
+<div class="header">
+  <h1>프로필 수정</h1>
+</div>
+
+<div class="bottom">
+
+  <div id="profileForm" name="infobox">
+    <div class="first">
+      <p class="p-3">사용자 아이디</p>
+      <span id="username" th:text="${profile.username}" class="username"></span>
+    </div>
+
+    <div class="second">
+      <p class="p-3">수정할 닉네임</p>
+      <input type="text" id="nickname" class="inputbox form-control text-center"
+             aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+    </div>
+
+    <div class="mybuttons">
+      <button type="button" onclick="save()" id="btn_modify" class="btn btn-primary btn m-2">SAVE</button>
+      <button type="button" id="btn_previous" class="btn btn-primary btn m-2"
+              onclick="location.href='/api/profile'">CANCEL
+      </button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
+
+<script>
+  function save() {
+    let url = window.location.href;
+    let id = url.replace("http://localhost:8080/api/edit_profile/", "");
+
+
+    var nickname = $('#nickname').val();
+    console.log(nickname);
+
+    $.ajax({
+      type : "PUT",
+      url: `/api/profile/update/` + id,
+      contentType: "application/json",
+      data: JSON.stringify({nickname: nickname}),
+      success: function (response, status, xhr) {
+        Swal.fire({
+          icon: 'success',                         // Alert 타입
+          title: '수정 완료!'        // Alert 제목
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.href = `http://localhost:8080/api/auth/backoffice`;
+          }
+        });
+
+      },
+      error: function (xhr, status, error) {
+        Swal.fire({
+          icon: 'error',                         // Alert 타입
+          title: '수정 실패 !'        // Alert 제목
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.href = `http://localhost:8080/api/auth/backoffice`;
+          }
+        });
+      }
+    });
+  }
+
+</script>

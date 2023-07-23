@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/128/1534/1534072.png" />
+
+  <title>MyPostGraph</title>
+
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+          integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.1.4/pagination.min.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    * {
+      font-family: 'IBM Plex Sans KR', sans-serif;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background: rgb(255, 236, 244);
+      background: radial-gradient(circle, rgba(255, 236, 244, 1) 0%, rgba(236, 251, 255, 1) 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .header{
+      padding-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      height: 15%;
+      width: 100%;
+    }
+
+    .bottom{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 85%;
+      width: 100%;
+    }
+
+    #myChart {
+      max-height: 80%;
+      max-width: 90%;
+    }
+
+    #button {
+      width: 100px;
+      height: 40px;
+      color: #fff;
+      border-radius: 5px;
+      padding: 10px 25px;
+      font-family: 'Lato', sans-serif;
+      font-weight: bold;
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      display: inline-block;
+      box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+      7px 7px 20px 0px rgba(0,0,0,.1),
+      4px 4px 5px 0px rgba(0,0,0,.1);
+      outline: none;
+      line-height: 42px;
+      padding: 0;
+      border: none;
+      background: #FFCACA;
+      background: linear-gradient(0deg, #FFCACA 0%, #FFB1B1 100%);
+    }
+
+    #button:hover {
+      color: #FFCACA;
+      background: transparent;
+      box-shadow:none;
+    }
+
+    #button:before,
+    #button:after{
+      content:'';
+      position:absolute;
+      top:0;
+      right:0;
+      height:2px;
+      width:0;
+      background: #FFCACA;
+      box-shadow:
+              -1px -1px 5px 0px #fff,
+              7px 7px 20px 0px #0003,
+              4px 4px 5px 0px #0002;
+      transition:400ms ease all;
+    }
+
+    #button:after{
+      right:inherit;
+      top:inherit;
+      left:0;
+      bottom:0;
+    }
+
+    #button:hover:before,
+    #button:hover:after{
+      width:100%;
+      transition:800ms ease all;
+    }
+
+    .header div button {
+      margin: 10px;
+      font-weight: bold;
+      width: 150px;
+      height: 35px;
+      color: darkslategrey;
+      border-radius: 5px;
+      background: #FFCACA;
+      background: linear-gradient(0deg, #FFCACA 0%, #FFB1B1 100%);
+      border: none;
+    }
+
+    .header div button :before {
+      height: 0%;
+      width: 2px;
+    }
+
+    .header div button:hover {
+      cursor: pointer;
+      box-shadow: 4px 4px 4px 0 rgba(255, 255, 255, .5),
+      -4px -4px 6px 0 rgba(116, 125, 136, .5),
+      inset -4px -4px 4px 0 rgba(255, 255, 255, .2),
+      inset 4px 4px 4px 0 rgba(0, 0, 0, .4);
+    }
+
+    h4 {
+      margin-top: 10px;
+      width: 300px;
+      border-radius: 10px;
+      margin: 0px;
+      background:rgba(255,255,255,.3);
+    }
+  </style>
+
+</head>
+<body>
+<div class="header">
+  <button id="button" onclick="location.href='/'">메인으로</button>
+  <div>
+    <button onclick="updateChartWithData()">작성 게시글 조회수</button>
+    <button onclick="updateChartWithLike()">작성 게시글 좋아요수</button>
+    <button onclick="updateChartWithComment()">작성 댓글 좋아요수</button>
+  </div>
+  <h4 id="headerText"></h4>
+</div>
+
+<div class="bottom">
+  <canvas id="myChart" width="400" height="200"></canvas>
+</div>
+</body>
+
+<script>
+  function updateChartWithData() {
+    $.ajax({
+      url: '/api/getChartData', // 서버에서 데이터를 가져올 URL
+      method: 'GET', // HTTP 메서드 (GET)
+      dataType: 'json', // 데이터 형식 (JSON)
+      success: function (data) {
+        // 서버에서 받아온 데이터를 이용하여 그래프 업데이트
+        const labels = data.map(item => item.title);
+        const values = data.map(item => item.views);
+
+        myChart.data.labels = labels; // 그래프의 이름으로 사용할 라벨 설정
+        myChart.data.datasets[0].data = values; // 그래프의 값으로 사용할 데이터 설정
+        myChart.options.plugins.tooltip.callbacks.label = function (context) {
+          const dataIndex = context.dataIndex; // 해당 데이터의 인덱스를 가져옴
+          const value = context.dataset.data[dataIndex]; // 해당 데이터의 값 가져옴
+          return '조회수: ' + value;
+        };
+        // h4 태그에 동적으로 표시할 텍스트 설정
+        document.getElementById("headerText").innerText = "작성 게시글 조회수 그래프";
+        myChart.update(); // 그래프 업데이트
+
+      },
+      error: function (xhr, status, error) {
+        console.error('Error while fetching data:', error);
+      }
+    });
+  }
+
+  function updateChartWithLike() {
+    $.ajax({
+      url: '/api/getChartData', // 서버에서 데이터를 가져올 URL
+      method: 'GET', // HTTP 메서드 (GET)
+      dataType: 'json', // 데이터 형식 (JSON)
+      success: function (data) {
+        // 서버에서 받아온 데이터를 이용하여 그래프 업데이트
+        const labels = data.map(item => item.title);
+        const values = data.map(item => item.likeCount);
+
+        myChart.data.labels = labels; // 그래프의 이름으로 사용할 라벨 설정
+        myChart.data.datasets[0].data = values; // 그래프의 값으로 사용할 데이터 설정
+        myChart.options.plugins.tooltip.callbacks.label = function (context) {
+          const dataIndex = context.dataIndex; // 해당 데이터의 인덱스를 가져옴
+          const value = context.dataset.data[dataIndex]; // 해당 데이터의 값 가져옴
+          return '좋아요수: ' + value;
+        };
+        // h4 태그에 동적으로 표시할 텍스트 설정
+        document.getElementById("headerText").innerText = "작성 게시글 좋아요수 그래프";
+        myChart.update(); // 그래프 업데이트
+      },
+      error: function (xhr, status, error) {
+        console.error('Error while fetching data:', error);
+      }
+    });
+  }
+
+  function updateChartWithComment() {
+    $.ajax({
+      url: '/api/getChartDataComment', // 서버에서 데이터를 가져올 URL
+      method: 'GET', // HTTP 메서드 (GET)
+      dataType: 'json', // 데이터 형식 (JSON)
+      success: function (data) {
+        // 서버에서 받아온 데이터를 이용하여 그래프 업데이트
+        const labels = data.map(item => item.commentcontents);
+        const values = data.map(item => item.commentlikeCount);
+
+        myChart.data.labels = labels; // 그래프의 이름으로 사용할 라벨 설정
+        myChart.data.datasets[0].data = values; // 그래프의 값으로 사용할 데이터 설정
+        myChart.options.plugins.tooltip.callbacks.label = function (context) {
+          const dataIndex = context.dataIndex; // 해당 데이터의 인덱스를 가져옴
+          const value = context.dataset.data[dataIndex]; // 해당 데이터의 값 가져옴
+          return '좋아요수: ' + value;
+        };
+        // h4 태그에 동적으로 표시할 텍스트 설정
+        document.getElementById("headerText").innerText = "작성 댓글 좋아요수 그래프";
+        myChart.update(); // 그래프 업데이트
+
+      },
+      error: function (xhr, status, error) {
+        console.error('Error while fetching data:', error);
+      }
+    });
+  }
+
+  // 그래프 생성 (처음에는 임의의 데이터로 그래프를 그립니다)
+  const ctx = document.getElementById('myChart').getContext('2d');
+  const myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['A', 'B', 'C', 'D', 'E'],
+      datasets: [{
+        label: 'Sample Data',
+        data: [10, 20, 15, 25, 30],
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      },
+      plugins: {
+        legend: {
+          display: false // 라벨 숨기기
+        },
+        tooltip: {
+          mode: 'index', // 인덱스 기반 툴팁 표시
+          intersect: false, // 겹치지 않도록 설정
+          callbacks: {
+            label: function (context) {
+              const value = context.parsed.y; // y축에 해당하는 값을 가져옴
+              return '조회수: ' + value;
+            }
+          }
+        }
+      }
+    }
+  });
+
+  // 페이지가 로드될 때 처음 한 번 그래프 데이터를 업데이트합니다.
+  updateChartWithData();
+</script>
+</html>

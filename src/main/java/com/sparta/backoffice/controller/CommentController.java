@@ -20,9 +20,14 @@ public class CommentController {
 
     private final CommentService commentService;
 
+//    @GetMapping("/comments")
+//    public List<CommentResponseDto> getAllComment() {
+//        return commentService.getAllComment();
+//    }
+
     @GetMapping("/comments")
-    public List<CommentResponseDto> getAllComment() {
-        return commentService.getAllComment();
+    public List<CommentResponseDto> getAllComment(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return commentService.getAllComment(userDetails.getUser());
     }
 
     @PostMapping("/{postid}/comment")
@@ -34,14 +39,14 @@ public class CommentController {
 
     @PutMapping("/{postid}/comment/{commentid}")
     public ResponseEntity<String> updateComment(@PathVariable Long commentid,
-                                            @RequestBody CommentRequestDto commentRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+                                                @RequestBody CommentRequestDto commentRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         log.info("Controller | commentid: " + commentid + ", username: " + userDetails.getUsername());
         return commentService.updateComment(commentid, commentRequestDto, userDetails.getUser());
     }
 
     @DeleteMapping("/{postid}/comment/{commentid}")
     public ResponseEntity<String> deleteComment(@PathVariable Long postid, @PathVariable Long commentid,
-                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
+                                                @AuthenticationPrincipal UserDetailsImpl userDetails) {
         log.info("Controller | commentid: " + commentid + ", username: " + userDetails.getUsername());
         return commentService.deleteComment(postid, commentid, userDetails.getUser());
     }

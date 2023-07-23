@@ -2,6 +2,7 @@ package com.sparta.backoffice.controller;
 
 import com.sparta.backoffice.dto.PostRequestDto;
 import com.sparta.backoffice.dto.PostResponseDto;
+import com.sparta.backoffice.dto.PostsResponseDto;
 import com.sparta.backoffice.entity.User;
 import com.sparta.backoffice.security.UserDetailsImpl;
 import com.sparta.backoffice.service.PostService;
@@ -10,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -29,9 +30,14 @@ public class PostController {
         return postService.createPost(requestDto, user);
     }
 
+//    @GetMapping("/posts/{method}")
+//    public List<PostResponseDto> getAllPost(@PathVariable String method) {
+//        return postService.getAllPost(method);
+//    }
+
     @GetMapping("/posts/{method}")
-    public List<PostResponseDto> getAllPost(@PathVariable String method) {
-        return postService.getAllPost(method);
+    public List<PostResponseDto> getAllPost(@PathVariable String method, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return postService.getAllPost(method, userDetails.getUser());
     }
 
     // 게시글 업데이트

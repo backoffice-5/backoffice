@@ -14,9 +14,6 @@ public class ProfileResponseDto {
     private String nickname;
     private String role;
 
-
-
-
     //회원 정보
     public ProfileResponseDto(User user) {
         this.id = user.getId();

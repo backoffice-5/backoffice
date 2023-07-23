@@ -35,6 +35,17 @@ public class ProfileService {
 
     }
 
+    public ProfileResponseDto getProfileBy(Long id) {
+
+        //회원 존재확인
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 회원은 존재하지 않습니다"));
+
+        //회원 정보 보여주기
+        return new ProfileResponseDto(user);
+
+    }
+
     //회원 개별 조회(관리자 모드)
     public ProfileResponseDto getProfileByAdmin(String username, UserRoleEnum role) {
 
@@ -138,6 +149,22 @@ public class ProfileService {
         return new ProfileResponseDto(author);
     }
 
+    @Transactional
+    public ProfileResponseDto updateProfileAdmin(Long id, ProfileRequestDto profileRequestDto, User user) {
+
+        //회원 존재 확인
+        User author = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("회원정보가 존재하지 않습니다."));
+
+        if (!user.getRole().equals(UserRoleEnum.ADMIN)) {
+            throw new IllegalArgumentException("관리자만 수정 가능합니다.");
+        }
+
+        //새 닉네임 값 넣기
+        author.setNickname(profileRequestDto.getNickname());
+
+        return new ProfileResponseDto(author);
+    }
 
     //비밀번호 변경
     @Transactional

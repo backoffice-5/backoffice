@@ -6,9 +6,11 @@ import com.sparta.backoffice.security.UserDetailsImpl;
 import com.sparta.backoffice.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -33,6 +35,22 @@ public class ProfileViewController {
 
 
         return "profile";
+
+    }
+
+    @GetMapping("/edit_profile/{id}")
+    public String viewProfileByAdmin(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                     Model model, @PathVariable Long id) {
+
+        // 로그인한 회원 정보 profileResponseDto 담기
+        // 넘어온 id 값으로 user를 찾자 !
+        ProfileResponseDto profileResponseDto = profileService.getProfileBy(id);
+
+        //정보 모델에 담기
+        model.addAttribute("profile", profileResponseDto);
+
+
+        return "editProfile2";
 
     }
 

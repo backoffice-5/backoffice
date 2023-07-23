@@ -24,6 +24,7 @@ import java.util.List;
 
 
 import static com.sparta.backoffice.entity.UserRoleEnum.ADMIN;
+import static com.sparta.backoffice.entity.UserRoleEnum.USER;
 
 @Slf4j
 @Service
@@ -145,8 +146,21 @@ public class CommentService {
         return commentLikeRepository.findByCommentAndUser(comment, user);
     }
 
-    public List<CommentResponseDto> getAllComment() {
+//    public List<CommentResponseDto> getAllComment() {
+//        List<Comment> commentList = commentRepository.findAll();
+//        List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
+//        for (int i = 0; i < commentList.size(); i++) {
+//            commentResponseDtoList.add(new CommentResponseDto(commentList.get(i)));
+//        }
+//        return commentResponseDtoList;
+//    }
+
+    public List<CommentResponseDto> getAllComment(User user) {
         List<Comment> commentList = commentRepository.findAll();
+        if (!user.getRole().equals(ADMIN)) {
+            commentList = commentRepository.findAllByUser(user);
+        }
+
         List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
         for (int i = 0; i < commentList.size(); i++) {
             commentResponseDtoList.add(new CommentResponseDto(commentList.get(i)));
