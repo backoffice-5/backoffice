@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/128/1534/1534072.png" />
+
   <title>MyPostGraph</title>
 
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"
@@ -53,11 +55,11 @@
     }
 
     #myChart {
-      max-height: 90%;
+      max-height: 80%;
       max-width: 90%;
     }
 
-    button {
+    #button {
       width: 100px;
       height: 40px;
       color: #fff;
@@ -81,14 +83,14 @@
       background: linear-gradient(0deg, #FFCACA 0%, #FFB1B1 100%);
     }
 
-    button:hover {
+    #button:hover {
       color: #FFCACA;
       background: transparent;
       box-shadow:none;
     }
 
-    button:before,
-    button:after{
+    #button:before,
+    #button:after{
       content:'';
       position:absolute;
       top:0;
@@ -103,25 +105,63 @@
       transition:400ms ease all;
     }
 
-    button:after{
+    #button:after{
       right:inherit;
       top:inherit;
       left:0;
       bottom:0;
     }
 
-    button:hover:before,
-    button:hover:after{
+    #button:hover:before,
+    #button:hover:after{
       width:100%;
       transition:800ms ease all;
+    }
+
+    .header div button {
+      margin: 10px;
+      font-weight: bold;
+      width: 150px;
+      height: 35px;
+      color: darkslategrey;
+      border-radius: 5px;
+      background: #FFCACA;
+      background: linear-gradient(0deg, #FFCACA 0%, #FFB1B1 100%);
+      border: none;
+    }
+
+    .header div button :before {
+      height: 0%;
+      width: 2px;
+    }
+
+    .header div button:hover {
+      cursor: pointer;
+      box-shadow: 4px 4px 4px 0 rgba(255, 255, 255, .5),
+      -4px -4px 6px 0 rgba(116, 125, 136, .5),
+      inset -4px -4px 4px 0 rgba(255, 255, 255, .2),
+      inset 4px 4px 4px 0 rgba(0, 0, 0, .4);
+    }
+
+    h4 {
+      margin-top: 10px;
+      width: 300px;
+      border-radius: 10px;
+      margin: 0px;
+      background:rgba(255,255,255,.3);
     }
   </style>
 
 </head>
 <body>
 <div class="header">
-  <button onclick="location.href='/'">메인으로</button>
-  <h2>작성 게시글 조회수</h2>
+  <button id="button" onclick="location.href='/'">메인으로</button>
+  <div>
+    <button onclick="updateChartWithData()">작성 게시글 조회수</button>
+    <button onclick="updateChartWithLike()">작성 게시글 좋아요수</button>
+    <button onclick="updateChartWithComment()">작성 댓글 좋아요수</button>
+  </div>
+  <h4 id="headerText"></h4>
 </div>
 
 <div class="bottom">
@@ -142,7 +182,70 @@
 
         myChart.data.labels = labels; // 그래프의 이름으로 사용할 라벨 설정
         myChart.data.datasets[0].data = values; // 그래프의 값으로 사용할 데이터 설정
+        myChart.options.plugins.tooltip.callbacks.label = function (context) {
+          const dataIndex = context.dataIndex; // 해당 데이터의 인덱스를 가져옴
+          const value = context.dataset.data[dataIndex]; // 해당 데이터의 값 가져옴
+          return '조회수: ' + value;
+        };
+        // h4 태그에 동적으로 표시할 텍스트 설정
+        document.getElementById("headerText").innerText = "작성 게시글 조회수 그래프";
         myChart.update(); // 그래프 업데이트
+
+      },
+      error: function (xhr, status, error) {
+        console.error('Error while fetching data:', error);
+      }
+    });
+  }
+
+  function updateChartWithLike() {
+    $.ajax({
+      url: '/api/getChartData', // 서버에서 데이터를 가져올 URL
+      method: 'GET', // HTTP 메서드 (GET)
+      dataType: 'json', // 데이터 형식 (JSON)
+      success: function (data) {
+        // 서버에서 받아온 데이터를 이용하여 그래프 업데이트
+        const labels = data.map(item => item.title);
+        const values = data.map(item => item.likeCount);
+
+        myChart.data.labels = labels; // 그래프의 이름으로 사용할 라벨 설정
+        myChart.data.datasets[0].data = values; // 그래프의 값으로 사용할 데이터 설정
+        myChart.options.plugins.tooltip.callbacks.label = function (context) {
+          const dataIndex = context.dataIndex; // 해당 데이터의 인덱스를 가져옴
+          const value = context.dataset.data[dataIndex]; // 해당 데이터의 값 가져옴
+          return '좋아요수: ' + value;
+        };
+        // h4 태그에 동적으로 표시할 텍스트 설정
+        document.getElementById("headerText").innerText = "작성 게시글 좋아요수 그래프";
+        myChart.update(); // 그래프 업데이트
+      },
+      error: function (xhr, status, error) {
+        console.error('Error while fetching data:', error);
+      }
+    });
+  }
+
+  function updateChartWithComment() {
+    $.ajax({
+      url: '/api/getChartDataComment', // 서버에서 데이터를 가져올 URL
+      method: 'GET', // HTTP 메서드 (GET)
+      dataType: 'json', // 데이터 형식 (JSON)
+      success: function (data) {
+        // 서버에서 받아온 데이터를 이용하여 그래프 업데이트
+        const labels = data.map(item => item.commentcontents);
+        const values = data.map(item => item.commentlikeCount);
+
+        myChart.data.labels = labels; // 그래프의 이름으로 사용할 라벨 설정
+        myChart.data.datasets[0].data = values; // 그래프의 값으로 사용할 데이터 설정
+        myChart.options.plugins.tooltip.callbacks.label = function (context) {
+          const dataIndex = context.dataIndex; // 해당 데이터의 인덱스를 가져옴
+          const value = context.dataset.data[dataIndex]; // 해당 데이터의 값 가져옴
+          return '좋아요수: ' + value;
+        };
+        // h4 태그에 동적으로 표시할 텍스트 설정
+        document.getElementById("headerText").innerText = "작성 댓글 좋아요수 그래프";
+        myChart.update(); // 그래프 업데이트
+
       },
       error: function (xhr, status, error) {
         console.error('Error while fetching data:', error);
@@ -188,8 +291,6 @@
       }
     }
   });
-
-
 
   // 페이지가 로드될 때 처음 한 번 그래프 데이터를 업데이트합니다.
   updateChartWithData();
