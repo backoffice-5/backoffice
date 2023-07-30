@@ -160,11 +160,35 @@ input {
     background:#1161ee;
 }
 
-.login-form .group > button{
+.login-form .group > #login-submit{
     width:100%;
     color:#ffffff;			//버튼 글 색
     display:block;
     background-color:pink;    //로그인 버튼 색
+    font-size:18px;
+    font-weight: bold;
+    border:none;
+    padding:15px 20px;
+    border-radius:25px;
+}
+
+.login-form .group #kakao-login-submit {
+    width:100%;
+    color:#ffffff;			//버튼 글 색
+    display:block;
+    background-color:yellow;    //로그인 버튼 색
+    font-size:18px;
+    font-weight: bold;
+    border:none;
+    padding:15px 20px;
+    border-radius:25px;
+}
+
+.login-form .group #naver-login-submit {
+    width:100%;
+    color:#ffffff;			//버튼 글 색
+    display:block;
+    background-color:greenyellow;    //로그인 버튼 색
     font-size:18px;
     font-weight: bold;
     border:none;

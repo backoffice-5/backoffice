@@ -2,23 +2,23 @@ package com.sparta.backoffice.controller;
 
 import com.sparta.backoffice.dto.CommentResponseDto;
 import com.sparta.backoffice.dto.PostResponseDto;
-import com.sparta.backoffice.dto.PostsResponseDto;
 import com.sparta.backoffice.entity.Post;
 import com.sparta.backoffice.entity.UserRoleEnum;
 import com.sparta.backoffice.repository.CommentRepository;
 import com.sparta.backoffice.repository.PostRepository;
 import com.sparta.backoffice.security.UserDetailsImpl;
 import com.sparta.backoffice.service.CommentLikeService;
-import com.sparta.backoffice.service.CommentService;
 import com.sparta.backoffice.service.PostLikeService;
 import com.sparta.backoffice.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cglib.core.Local;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
