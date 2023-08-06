@@ -59,7 +59,7 @@ public class UserService {
         List<Follow> followings = followRepository.findAllByFollowing(user); // 팔로우 하는 사람 (해당 사람이 팔로우를 한 내역)
 
         return new UserResponseDto(user.getUsername(), user.getNickname(),
-                followings.size(), followers.size());
+                followers.size(), followings.size());
     }
 
     public Boolean findFollowing(User user, User followUser) {
