@@ -105,8 +105,19 @@ public class ProfileController {
 
     }
 
+    @PutMapping("/profile/update/{id}")
+    public ProfileResponseDto profileUpdateAdmin(@PathVariable Long id,
+                                                 @RequestBody ProfileRequestDto profileRequestDto,
+                                                 @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+
+        // path에서 id 가져와서, 해당 id를 가진 user를 찾아서 변경해라.
+        return profileService.updateProfileAdmin(id, profileRequestDto, userDetails.getUser());
+
+    }
+
     //비밀번호 변경
-    @PutMapping("profile/password")
+    @PutMapping("/profile/password")
     public String passwordUpdate(@RequestBody ProfileRequestDto profileRequestDto,
                                  @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {

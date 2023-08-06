@@ -2,25 +2,27 @@ package com.sparta.backoffice.controller;
 
 import com.sparta.backoffice.dto.CommentResponseDto;
 import com.sparta.backoffice.dto.PostResponseDto;
+import com.sparta.backoffice.dto.UserResponseDto;
 import com.sparta.backoffice.entity.Post;
+import com.sparta.backoffice.entity.User;
 import com.sparta.backoffice.entity.UserRoleEnum;
 import com.sparta.backoffice.repository.CommentRepository;
 import com.sparta.backoffice.repository.PostRepository;
+import com.sparta.backoffice.repository.UserRepository;
 import com.sparta.backoffice.security.UserDetailsImpl;
 import com.sparta.backoffice.service.CommentLikeService;
 import com.sparta.backoffice.service.PostLikeService;
 import com.sparta.backoffice.service.PostService;
+import com.sparta.backoffice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Controller
@@ -31,6 +33,7 @@ public class ViewController {
     private final CommentRepository commentRepository;
     private final CommentLikeService commentLikeService;
     private final PostLikeService postlikeService;
+    private final UserService userService;
     private final PostRepository postRepository;
 
     @GetMapping("/")
@@ -117,6 +120,32 @@ public class ViewController {
 
         // post.html 뷰 조회
         return "post";
+    }
+
+    @GetMapping("/api/auth/page/{username}")
+    public String getUserPage(@PathVariable String username, @AuthenticationPrincipal UserDetailsImpl userDetails, Model model) {
+        // userRequestDto를 넘겨서 해당 user에 대한 정보를 가져옴 (그 유저가 작성한 post들! 과 해당 유저의 팔로워 팔로잉 숫자까지)
+        // model에 담기 - posts와 profile로
+        log.info(username);
+        // 해당 사용자 검색
+        User user = userService.findUser(username);
+
+        Boolean follow = false;
+        if (userDetails != null) {
+            follow = userService.findFollowing(userDetails.getUser(), user);
+        }
+        model.addAttribute("follow", follow);
+
+        // 해당 프로필 사용자의 정보
+        UserResponseDto userResponseDto = userService.findUserProfile(user);
+        model.addAttribute("profile", userResponseDto);
+        
+        // 해당 프로필 사용자의 게시글 목록
+        List<PostResponseDto> postResponseDtoList = postService.findPosts(user);
+        model.addAttribute("posts", postResponseDtoList);
+        // 그리고 로그인 한 유저가 해당 팔로워를 팔로우 했는지 안했는지 에 대한 boolean 타입의 필드도 가져옴
+        
+        return "userPage";
     }
 
 }

@@ -358,7 +358,23 @@
             margin-bottom: 10px;
         }
 
+        .card-header {
+            width: 10%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-image2 {
+            max-width: 80%;
+            max-height: 80%;
+            object-fit: cover;
+            border-radius: 99%;
+        }
+
+
         .card-body {
+            width: 90%;
             padding: 15px;
             display: flex;
             justify-content: space-between;
@@ -375,7 +391,9 @@
             border-right: 1px solid rgba(255, 255, 255, 0.2);
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
             overflow: hidden;
-            color: #000
+            color: #000;
+            display: flex;
+            flex-direction: row;
         }
 
         .cards::-webkit-scrollbar {
@@ -632,6 +650,7 @@
             overflow: hidden;
             float: left;
         }
+
         .profile-image {
             width: 100%;
             height: 100%;
@@ -639,6 +658,10 @@
         }
 
         li {
+            cursor: pointer;
+        }
+
+        img {
             cursor: pointer;
         }
     </style>
@@ -708,23 +731,29 @@
     </div>
 
     <div class = "cards">
-        <div class="row" th:each="post : ${posts}">
-            <div class="card">
-                <div class="card-header" > <!--th:text="${post.id}"-->
-                </div>
-                <div class="card-body">
-                    <div class="left-content">
-                        <h4 class="card-title" th:text="${post.title}">title</h4>
-                        <p class="card-text" th:text="${post.nickname}">username</p>
-                        <!--"'Value 1: ' + ${value1} + ' - Value 2: ' + ${value2}"-->
-                        <p class="card-text" th:text="${#temporals.format(post.createAt, 'yyyy-MM-dd HH:mm')} + ' | 조회수: ' + ${post.views} + '회 | 좋아요 수: ' + ${post.likeCount} + '개 | 댓글 수: ' + ${post.commentCount}">시간</p>
+        <div>
+            <div class="row" th:each="post : ${posts}">
+                <div class="card">
+                    <div class="card-header" > <!--th:text="${post.id}"-->
+                        <!--onclick="gotoUserpage()" th:id="${post.username}"-->
+                        <img class="profile-image2"
+                             th:attr="data-username=${post.username}"
+                             src="https://velog.velcdn.com/images/jee_ji/profile/399924c6-4e04-4ff6-9d95-4a76ffe2663b/image.png">
                     </div>
-                    <div class="right-content">
-                        <button th:onclick="|location.href='/api/post/' + ${post.id}|" class="btn-5">보러가기</button>
+                    <div class="card-body">
+                        <div class="left-content">
+                            <h4 class="card-title" th:text="${post.title}">title</h4>
+                            <p class="card-text" th:text="${post.nickname}">username</p>
+                            <!--"'Value 1: ' + ${value1} + ' - Value 2: ' + ${value2}"-->
+                            <p class="card-text" th:text="${#temporals.format(post.createAt, 'yyyy-MM-dd HH:mm')} + ' | 조회수: ' + ${post.views} + '회 | 좋아요 수: ' + ${post.likeCount} + '개 | 댓글 수: ' + ${post.commentCount}">시간</p>
+                        </div>
+                        <div class="right-content">
+                            <button th:onclick="|location.href='/api/post/' + ${post.id}|" class="btn-5">보러가기</button>
+                        </div>
                     </div>
                 </div>
+                <br>
             </div>
-            <br>
         </div>
     </div>
 
@@ -733,6 +762,14 @@
 <script>
     const radioButtons = document.querySelectorAll('input[name="tabs"]');
     const cardsContainer = document.querySelector('.cards');
+
+    const profileImages = document.querySelectorAll('.profile-image2');
+    profileImages.forEach(image => {
+        image.addEventListener('click', function() {
+            const username = this.getAttribute('data-username');
+            location.href = '/api/auth/page/' + username;
+        });
+    });
 
     function updateCardData(posts) {
         // 기존의 cards 내용 삭제
@@ -754,7 +791,9 @@
             card.innerHTML = `
                 <div class="row" >
                     <div class="card">
-                        <div class="card-header" >
+                        <div class="card-header">
+                            <img class="profile-image2"
+                                src="https://velog.velcdn.com/images/jee_ji/profile/399924c6-4e04-4ff6-9d95-4a76ffe2663b/image.png">
                         </div>
                         <div class="card-body">
                             <div class="left-content">
@@ -825,8 +864,6 @@
         const graphButton = document.getElementById('graphButton');
 
         const jwtToken = getJwtFromCookie(); // Request 헤더에서 JWT 토큰을 가져옴
-
-        console.log(jwtToken);
 
         if (jwtToken) {
             loginButton.style.display = 'none'; // JWT 토큰이 존재하면 로그인 버튼을 감춤
