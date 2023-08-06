@@ -175,6 +175,9 @@ public class PostService {
         return postsResponseDtoList;
     }
 
+    public List<PostResponseDto> findPosts(User user) {
+        return postRepository.findAllByUser(user).stream().map(PostResponseDto::new).toList();
+    }
 
     //---------------------private 메서드------------------------------
     // id로 Post entity를 찾아주는 메서드

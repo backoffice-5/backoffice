@@ -271,7 +271,7 @@
 <div class = "top">
     <div class="mybutton">
         <button id="loginButton">로그인</button>
-        <button id="logoutButton" onclick="logout()">로그아웃</button> <!--onclick="location.href='/api/logout'"-->
+        <button id="logoutButton" onclick="logout()">로그아웃</button>
     </div>
 
     <div class="header">
@@ -285,7 +285,7 @@
         <div class="title2" style="flex:0.2;">
             <!--            <div class="image">-->
             <div class="profile">
-                <div id="profile" class="box" onclick="my_page()">
+                <div id="profile" class="box" > <!--th:click="onUserPage(${post.username})"-->
                     <img class="profile-image"
                          src="https://velog.velcdn.com/images/jee_ji/profile/399924c6-4e04-4ff6-9d95-4a76ffe2663b/image.png">
                 </div>

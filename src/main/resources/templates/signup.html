@@ -44,7 +44,16 @@
                 <div class="group">
                     <button id="login-submit" onclick="login()">로그인</button>
                 </div>
+
                 <div class="hr"></div>
+
+                <div class="group">
+                    <button id="kakao-login-submit" onclick="location.href='https://kauth.kakao.com/oauth/authorize?client_id=baad2e9f2070a14181c64879fa40aeaa&redirect_uri=http://localhost:8080/api/auth/kakao/callback&response_type=code'">카카오 로그인</button>
+                </div>
+
+                <div class="group">
+                    <button id="naver-login-submit" onclick="location.href='https://nid.naver.com/oauth2.0/authorize?client_id=NFS1MQV1Ld00ZEejsbJh&redirect_uri=http://localhost:8080/api/auth/naver/callback&response_type=code'">네이버 로그인</button>
+                </div>
 
             </div>
             <div class="sign-up-htm">
